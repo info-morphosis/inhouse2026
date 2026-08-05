@@ -1,26 +1,70 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --neon: #00ff88;
+  --navy: #0a0e2a;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--navy);
+  color: #ffffff;
+}
+
+.btn-neon {
+  display: inline-block;
+  background-color: var(--neon);
+  color: var(--navy);
+  font-weight: 700;
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  transition: all 150ms;
+  cursor: pointer;
+}
+.btn-neon:hover { filter: brightness(1.1); }
+.btn-neon:active { transform: scale(0.97); }
+
+.btn-outline {
+  display: inline-block;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  font-weight: 600;
+  padding: 0.75rem 2rem;
+  border-radius: 0.75rem;
+  transition: all 150ms;
+  cursor: pointer;
+}
+.btn-outline:hover { background-color: rgba(0,255,136,0.08); }
+
+.card {
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  backdrop-filter: blur(8px);
+}
+
+.input-field {
+  width: 100%;
+  background-color: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: white;
+  outline: none;
+  transition: border-color 150ms;
+}
+.input-field::placeholder { color: rgba(255,255,255,0.35); }
+.input-field:focus { border-color: var(--neon); }
+
+.label {
+  display: block;
+  font-size: 0.875rem;
+  color: rgba(255,255,255,0.6);
+  margin-bottom: 0.25rem;
+  font-weight: 500;
+}
+
+select.input-field option {
+  background-color: #1a1f3a;
+  color: white;
 }
