@@ -163,7 +163,7 @@ function CheckoutForm() {
               He leído y acepto las{' '}
               <Link href="/politicas" target="_blank"
                 className="underline hover:text-[#00ff88] transition-colors" style={{ color: '#00ff88' }}>
-                políticas de cancelación y devolución
+                políticas de privacidad, cancelación y devolución
               </Link>
             </span>
           </label>
