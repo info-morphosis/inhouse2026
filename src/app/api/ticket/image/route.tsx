@@ -1,9 +1,18 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 import QRCode from 'qrcode'
+import fs from 'fs'
+import path from 'path'
 
-// Node.js runtime — the `qrcode` package and Buffer are available here.
 export const runtime = 'nodejs'
+
+function getLogoBase64(): string {
+  try {
+    const logoPath = path.join(process.cwd(), 'public', 'logo-inhouse.png')
+    const buf = fs.readFileSync(logoPath)
+    return `data:image/png;base64,${buf.toString('base64')}`
+  } catch { return '' }
+}
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
@@ -22,6 +31,8 @@ export async function GET(req: NextRequest) {
   } catch {
     qrDataUrl = ''
   }
+
+  const logoBase64 = getLogoBase64()
 
   return new ImageResponse(
     (
@@ -46,24 +57,32 @@ export async function GET(req: NextRequest) {
           <div style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
 
             {/* Logo row */}
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 6 }}>
-              <div style={{
-                width: 48, height: 48, borderRadius: 24,
-                background: '#00ff88', display: 'flex',
-                alignItems: 'center', justifyContent: 'center',
-                color: '#0a0e2a', fontWeight: 900, fontSize: 16,
-              }}>
-                IT
-              </div>
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 6 }}>
+              {logoBase64 ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={logoBase64} width={48} height={48} alt="INHOUSE" style={{ borderRadius: 10, objectFit: 'contain' }} />
+              ) : (
+                <div style={{
+                  width: 48, height: 48, borderRadius: 10,
+                  background: '#00ff88', display: 'flex',
+                  alignItems: 'center', justifyContent: 'center',
+                  color: '#0a0e2a', fontWeight: 900, fontSize: 16,
+                }}>IT</div>
+              )}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <span style={{ color: 'white', fontWeight: 800, fontSize: 22, lineHeight: 1 }}>INHOUSE Tech</span>
-                <span style={{ color: '#00ff88', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase' }}>IV Edicion · 2026</span>
+                <span style={{ color: '#00ff88', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', display: 'flex' }}>IV Edicion · 2026</span>
+              </div>
+              {/* ESPOL badge */}
+              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: 'auto', borderLeft: '1px solid rgba(255,255,255,0.15)', paddingLeft: 14 }}>
+                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 8, textTransform: 'uppercase', letterSpacing: 2, display: 'flex' }}>aval académico</span>
+                <span style={{ color: 'white', fontWeight: 800, fontSize: 18, fontStyle: 'italic', display: 'flex' }}>espol®</span>
               </div>
             </div>
 
             {/* Event subtitle */}
             <div style={{ color: '#b5c4ff', fontSize: 12, marginBottom: 10, display: 'flex' }}>
-              Experiencia IA 2026 · Con aval academico ESPOL
+              Experiencia IA 2026 · Congreso de transformacion digital
             </div>
 
             {/* Separator */}

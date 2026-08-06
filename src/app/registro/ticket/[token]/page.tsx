@@ -1,5 +1,16 @@
-﻿'use client'
+'use client'
 import { useState, use } from 'react'
+import EventHeader from '@/components/EventHeader'
+import LogoBadge from '@/components/LogoBadge'
+import EventFooter from '@/components/EventFooter'
+
+const PAISES = [
+  ['+593','🇪🇨'],['+57','🇨🇴'],['+51','🇵🇪'],['+58','🇻🇪'],['+591','🇧🇴'],
+  ['+56','🇨🇱'],['+54','🇦🇷'],['+598','🇺🇾'],['+595','🇵🇾'],['+52','🇲🇽'],
+  ['+506','🇨🇷'],['+507','🇵🇦'],['+502','🇬🇹'],['+504','🇭🇳'],['+503','🇸🇻'],
+  ['+505','🇳🇮'],['+1','🇺🇸'],['+55','🇧🇷'],['+34','🇪🇸'],['+44','🇬🇧'],
+  ['+33','🇫🇷'],['+49','🇩🇪'],['+39','🇮🇹'],['+351','🇵🇹'],
+]
 
 export default function RegistroTicketPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = use(params)
@@ -13,12 +24,10 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    setLoading(true)
-    setError('')
+    setLoading(true); setError('')
     try {
       const res = await fetch('/api/registro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ tipo: 'ticket', token, ...form, whatsapp: form.codigoPais + form.telefono }),
       })
       const data = await res.json()
@@ -26,12 +35,12 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
       setDone(true)
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error inesperado')
-    } finally {
-      setLoading(false)
-    }
+    } finally { setLoading(false) }
   }
 
   if (done) return (
+    <>
+    <EventHeader />
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="card max-w-md w-full text-center py-10">
         <div className="text-6xl mb-4">✅</div>
@@ -39,10 +48,15 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
         <p className="text-white/60">Recibirás tu ticket QR por email y WhatsApp.</p>
       </div>
     </main>
+    <EventFooter />
+    </>
   )
 
   return (
-    <main className="min-h-screen max-w-lg mx-auto px-4 py-12">
+    <>
+    <EventHeader />
+    <main className="max-w-lg mx-auto px-4 py-8">
+      <LogoBadge />
       <div className="text-center mb-8">
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
           ENTRADA INHOUSE TECH 2026
@@ -50,82 +64,38 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
         <h1 className="text-2xl font-bold">Completa tu registro</h1>
         <p className="text-white/50 mt-2 text-sm">20 agosto · Tenis Club Samborondón</p>
       </div>
-
       <form onSubmit={handleSubmit} className="card space-y-4">
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="label">Nombres *</label>
-            <input className="input-field" required value={form.nombres}
-              onChange={e => setForm(f => ({ ...f, nombres: e.target.value }))} />
-          </div>
-          <div>
-            <label className="label">Apellidos *</label>
-            <input className="input-field" required value={form.apellidos}
-              onChange={e => setForm(f => ({ ...f, apellidos: e.target.value }))} />
-          </div>
+          <div><label className="label">Nombres *</label>
+            <input className="input-field" required value={form.nombres} onChange={e => setForm(f => ({ ...f, nombres: e.target.value }))} /></div>
+          <div><label className="label">Apellidos *</label>
+            <input className="input-field" required value={form.apellidos} onChange={e => setForm(f => ({ ...f, apellidos: e.target.value }))} /></div>
         </div>
         <div className="grid grid-cols-2 gap-4">
-          <div>
-            <label className="label">Tipo de ID *</label>
-            <select className="input-field" value={form.tipo_id}
-              onChange={e => setForm(f => ({ ...f, tipo_id: e.target.value }))}>
-              <option value="cedula">Cédula</option>
-              <option value="pasaporte">Pasaporte</option>
-              <option value="licencia">Licencia</option>
-            </select>
-          </div>
-          <div>
-            <label className="label">Número de ID *</label>
-            <input className="input-field" required value={form.ci_pasaporte}
-              onChange={e => setForm(f => ({ ...f, ci_pasaporte: e.target.value }))} />
-          </div>
+          <div><label className="label">Tipo de ID *</label>
+            <select className="input-field" value={form.tipo_id} onChange={e => setForm(f => ({ ...f, tipo_id: e.target.value }))}>
+              <option value="cedula">Cédula</option><option value="pasaporte">Pasaporte</option><option value="licencia">Licencia</option>
+            </select></div>
+          <div><label className="label">Número de ID *</label>
+            <input className="input-field" required value={form.ci_pasaporte} onChange={e => setForm(f => ({ ...f, ci_pasaporte: e.target.value }))} /></div>
         </div>
-        <div>
-          <label className="label">Email *</label>
-          <input className="input-field" type="email" required value={form.email}
-            onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
-        </div>
-        <div>
-          <label className="label">WhatsApp *</label>
+        <div><label className="label">Email *</label>
+          <input className="input-field" type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} /></div>
+        <div><label className="label">WhatsApp *</label>
           <div className="flex gap-2">
-            <select className="input-field-compact" value={form.codigoPais}
-              onChange={e => setForm(f => ({ ...f, codigoPais: e.target.value }))}>
-              <option value="+593">🇪🇨 +593</option>
-              <option value="+57">🇨🇴 +57</option>
-              <option value="+51">🇵🇪 +51</option>
-              <option value="+58">🇻🇪 +58</option>
-              <option value="+591">🇧🇴 +591</option>
-              <option value="+56">🇨🇱 +56</option>
-              <option value="+54">🇦🇷 +54</option>
-              <option value="+598">🇺🇾 +598</option>
-              <option value="+595">🇵🇾 +595</option>
-              <option value="+52">🇲🇽 +52</option>
-              <option value="+506">🇨🇷 +506</option>
-              <option value="+507">🇵🇦 +507</option>
-              <option value="+502">🇬🇹 +502</option>
-              <option value="+504">🇭🇳 +504</option>
-              <option value="+503">🇸🇻 +503</option>
-              <option value="+505">🇳🇮 +505</option>
-              <option value="+1">🇺🇸 +1</option>
-              <option value="+55">🇧🇷 +55</option>
-              <option value="+34">🇪🇸 +34</option>
-              <option value="+44">🇬🇧 +44</option>
-              <option value="+33">🇫🇷 +33</option>
-              <option value="+49">🇩🇪 +49</option>
-              <option value="+39">🇮🇹 +39</option>
-              <option value="+351">🇵🇹 +351</option>
+            <select className="input-field-compact" value={form.codigoPais} onChange={e => setForm(f => ({ ...f, codigoPais: e.target.value }))}>
+              {PAISES.map(([c, f]) => <option key={c} value={c}>{f} {c}</option>)}
             </select>
-            <input className="input-field flex-1 min-w-0" placeholder="9xxxxxxxx" required
-              value={form.telefono}
-              onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} />
+            <input className="input-field flex-1 min-w-0" placeholder="9xxxxxxxx" required value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} />
           </div>
         </div>
-
         {error && <p className="text-red-400 text-sm">{error}</p>}
         <button type="submit" disabled={loading} className="btn-neon w-full text-center disabled:opacity-50">
           {loading ? 'Registrando…' : 'Confirmar registro'}
         </button>
       </form>
     </main>
+    <EventFooter />
+    </>
   )
 }

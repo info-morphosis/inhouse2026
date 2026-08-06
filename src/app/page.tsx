@@ -37,28 +37,29 @@ const SPEAKERS = [
     pais: '🇨🇴',
     cargo: 'Gerente General, ElConserje Marketing de Opinión',
     tema: '"Empresas que ya usan IA: Historias que inspiran acción"',
-    foto: '/speakers/slide7_img0.jpg',
+    foto: '/speakers/sofia-londono.png',
   },
   {
     nombre: 'Mar Pujadas',
     pais: '🇪🇸',
     cargo: 'Co-founder & CEO, Omniloy',
     tema: '"IA que multiplica la capacidad hospitalaria"',
-    foto: '/speakers/slide8_img0.jpg',
+    foto: '/speakers/mar-pujadas.png',
   },
   {
-    nombre: 'Andrés Seminario & Luis Ignacio Hanna',
+    nombre: 'Podcast Racionalmente Irracional',
     pais: '🇪🇨',
-    cargo: 'Conductores, Podcast "Racionalmente Irracional"',
+    cargo: 'Andrés Seminario & Luis Ignacio Hanna',
     tema: '"2 episodios grabados en vivo con invitados especiales"',
-    foto: '/speakers/slide9_img0.jpg',
+    foto: '/logo-rr.png',
+    isPodcast: true,
   },
   {
     nombre: 'Óscar Rodríguez Lemus',
     pais: '🇨🇴',
     cargo: 'CEO, BhiPRO — Business Happiness Index Program',
     tema: '"Felicidad en el mundo laboral"',
-    foto: '/speakers/slide11_img0.jpg',
+    foto: '/speakers/oscar-lemus.png',
   },
 ]
 
@@ -104,8 +105,14 @@ export default function LandingPage() {
     <div className="min-h-screen" style={{ background: '#0a0e2a' }}>
       {/* NAV */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10" style={{ background: 'rgba(10, 14, 42, 0.85)' }}>
-        <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-4">
-          <span className="font-extrabold text-lg tracking-tight text-white">INHOUSE Tech 2026</span>
+        <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-3">
+          <div className="flex items-center gap-3">
+            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={38} height={38} className="rounded-lg object-contain" />
+            <div className="hidden sm:block">
+              <div className="font-extrabold text-base leading-tight text-white">INHOUSE Tech 2026</div>
+              <div className="text-[10px] text-white/40 leading-tight">Con aval académico <span className="font-bold italic text-white/60">espol®</span></div>
+            </div>
+          </div>
           <div className="hidden md:flex items-center gap-8">
             {['#speakers', '#agenda', '#entradas'].map((href) => (
               <a key={href} href={href} className="text-sm font-semibold uppercase tracking-widest text-white/50 hover:text-[#00ff88] transition-colors">
@@ -171,9 +178,16 @@ export default function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {SPEAKERS.map((s) => (
               <div key={s.nombre} className="speaker-card">
-                <div className="relative w-28 h-28 rounded-full mb-5 neon-border overflow-hidden shrink-0">
-                  <Image src={s.foto} alt={s.nombre} fill className="object-cover" />
-                </div>
+                {'isPodcast' in s && s.isPodcast ? (
+                  <div className="relative w-28 h-28 rounded-2xl mb-5 overflow-hidden shrink-0 flex items-center justify-center"
+                    style={{ background: '#0a0e2a', border: '1px solid rgba(0,255,136,0.3)' }}>
+                    <Image src={s.foto} alt="Racionalmente Irracional" width={90} height={90} className="object-contain" />
+                  </div>
+                ) : (
+                  <div className="relative w-28 h-28 rounded-full mb-5 neon-border overflow-hidden shrink-0">
+                    <Image src={s.foto} alt={s.nombre} fill className="object-cover" />
+                  </div>
+                )}
                 <h3 className="text-lg font-bold text-white mb-1">{s.nombre} {s.pais}</h3>
                 <p className="text-sm mb-3" style={{ color: '#b5c4ff' }}>{s.cargo}</p>
                 <p className="text-sm font-semibold" style={{ color: '#00ff88' }}>{s.tema}</p>
@@ -312,9 +326,34 @@ export default function LandingPage() {
       </main>
 
       <footer className="border-t border-white/10 py-12 mt-8" style={{ background: '#050814' }}>
-        <div className="max-w-7xl mx-auto px-5 lg:px-16 flex flex-col md:flex-row justify-between items-center gap-4 text-white/40 text-sm">
-          <p>© 2026 INHOUSE Tech IV Edición · Organizado por Morphosis</p>
-          <p>¿Auspiciante o invitado ESPOL? Usa el link personalizado que te enviaron.</p>
+        <div className="max-w-7xl mx-auto px-5 lg:px-16">
+          {/* Logos */}
+          <div className="flex items-center justify-center gap-8 mb-8">
+            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={120} height={48} className="object-contain opacity-80" />
+            <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.15)' }} />
+            <div className="text-center">
+              <div className="text-[9px] text-white/30 uppercase tracking-widest mb-0.5">Con aval académico</div>
+              <div className="font-extrabold text-2xl lowercase italic text-white/70">espol<span className="text-base align-super">®</span></div>
+            </div>
+          </div>
+
+          {/* Links + soporte */}
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm border-t border-white/10 pt-8">
+            <div className="flex gap-6">
+              <a href="mailto:tickets@morphosis.ec" className="text-white/40 hover:text-white transition-colors">tickets@morphosis.ec</a>
+              <a href="https://wa.me/593984309726" target="_blank" rel="noopener noreferrer"
+                className="hover:text-[#00ff88] transition-colors" style={{ color: '#00ff88' }}>
+                WhatsApp +593 98 430 9726
+              </a>
+            </div>
+            <div className="text-white/30 text-xs text-center">
+              © 2026 INHOUSE Tech IV Edición · Organizado por Morphosis ·{' '}
+              <a href="/politicas" className="hover:text-white/60 underline transition-colors">Políticas de cancelación</a>
+            </div>
+          </div>
+          <p className="text-white/25 text-xs text-center mt-4">
+            ¿Auspiciante o invitado ESPOL? Usa el link personalizado que te enviaron.
+          </p>
         </div>
       </footer>
     </div>

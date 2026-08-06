@@ -2,6 +2,9 @@
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
+import EventHeader from '@/components/EventHeader'
+import LogoBadge from '@/components/LogoBadge'
+import EventFooter from '@/components/EventFooter'
 
 const PAQUETES = {
   individual: { label: 'Entrada Individual', cantidad: 1, precio: 120 },
@@ -51,7 +54,10 @@ function CheckoutForm() {
   }
 
   return (
-    <main className="min-h-screen max-w-2xl mx-auto px-4 py-12">
+    <>
+    <EventHeader />
+    <main className="min-h-screen max-w-2xl mx-auto px-4 py-8">
+      <LogoBadge />
       <a href="/" className="text-white/40 text-sm hover:text-white mb-8 inline-block">← Volver</a>
 
       <div className="card mb-6 flex justify-between items-center">
@@ -172,6 +178,8 @@ function CheckoutForm() {
         <p className="text-white/30 text-xs text-center">Pago seguro vía Datafast · Powered by Morphosis</p>
       </form>
     </main>
+    <EventFooter />
+    </>
   )
 }
 
