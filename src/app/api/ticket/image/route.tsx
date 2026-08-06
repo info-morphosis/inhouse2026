@@ -6,10 +6,9 @@ import path from 'path'
 
 export const runtime = 'nodejs'
 
-function getLogoBase64(): string {
+function getLogoBase64(file: string): string {
   try {
-    const logoPath = path.join(process.cwd(), 'public', 'logo-inhouse.png')
-    const buf = fs.readFileSync(logoPath)
+    const buf = fs.readFileSync(path.join(process.cwd(), 'public', file))
     return `data:image/png;base64,${buf.toString('base64')}`
   } catch { return '' }
 }
@@ -32,7 +31,8 @@ export async function GET(req: NextRequest) {
     qrDataUrl = ''
   }
 
-  const logoBase64 = getLogoBase64()
+  const logoBase64 = getLogoBase64('logo-inhouse.png')
+  const espolBase64 = getLogoBase64('logo-espol.png')
 
   return new ImageResponse(
     (
@@ -73,11 +73,14 @@ export async function GET(req: NextRequest) {
                 <span style={{ color: 'white', fontWeight: 800, fontSize: 22, lineHeight: 1 }}>INHOUSE Tech</span>
                 <span style={{ color: '#00ff88', fontSize: 10, letterSpacing: 3, textTransform: 'uppercase', display: 'flex' }}>IV Edicion · 2026</span>
               </div>
-              {/* ESPOL badge */}
-              <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: 'auto', borderLeft: '1px solid rgba(255,255,255,0.15)', paddingLeft: 14 }}>
-                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 8, textTransform: 'uppercase', letterSpacing: 2, display: 'flex' }}>aval académico</span>
-                <span style={{ color: 'white', fontWeight: 800, fontSize: 18, fontStyle: 'italic', display: 'flex' }}>espol®</span>
-              </div>
+              {/* ESPOL logo */}
+              {espolBase64 && (
+                <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', marginLeft: 'auto', borderLeft: '1px solid rgba(255,255,255,0.15)', paddingLeft: 14 }}>
+                  <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: 8, textTransform: 'uppercase', letterSpacing: 2, display: 'flex', marginBottom: 4 }}>aval académico</span>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={espolBase64} width={90} height={28} alt="ESPOL" style={{ objectFit: 'contain' }} />
+                </div>
+              )}
             </div>
 
             {/* Event subtitle */}

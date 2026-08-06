@@ -48,11 +48,17 @@ const SPEAKERS = [
   },
   {
     nombre: 'Podcast Racionalmente Irracional',
-    pais: '🇪🇨',
-    cargo: 'Andrés Seminario & Luis Ignacio Hanna',
+    pais: '',
+    cargo: 'Conducido por Andrés Seminario & Luis Ignacio Hanna',
     tema: '"2 episodios grabados en vivo con invitados especiales"',
     foto: '/logo-rr.png',
     isPodcast: true,
+    hosts: [
+      { foto: '/speakers/andres-seminario.jpg', nombre: 'Andrés S.' },
+      { foto: '/speakers/luis-hanna.jpg', nombre: 'Luis I.H.' },
+      { foto: '/speakers/cecilia-paredes.jpg', nombre: 'Cecilia P.' },
+      { foto: '/speakers/luisa-gutierrez.jpg', nombre: 'Luisa G.' },
+    ],
   },
   {
     nombre: 'Óscar Rodríguez Lemus',
@@ -107,10 +113,10 @@ export default function LandingPage() {
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10" style={{ background: 'rgba(10, 14, 42, 0.85)' }}>
         <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-3">
           <div className="flex items-center gap-3">
-            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={38} height={38} className="rounded-lg object-contain" />
-            <div className="hidden sm:block">
+            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={56} height={56} className="rounded-xl object-contain" />
+            <div className="hidden sm:flex flex-col gap-1">
               <div className="font-extrabold text-base leading-tight text-white">INHOUSE Tech 2026</div>
-              <div className="text-[10px] text-white/40 leading-tight">Con aval académico <span className="font-bold italic text-white/60">espol®</span></div>
+              <Image src="/logo-espol.png" alt="ESPOL" width={72} height={22} className="object-contain opacity-80" />
             </div>
           </div>
           <div className="hidden md:flex items-center gap-8">
@@ -129,9 +135,12 @@ export default function LandingPage() {
         <section className="relative flex flex-col items-center justify-center text-center px-4 pt-20 pb-24">
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,255,136,0.10) 0%, transparent 60%)' }} />
           <div className="relative z-10">
-            <div className="flex items-center justify-center gap-3 mb-6">
-              <div className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-sm" style={{ background: '#00ff88', color: '#0a0e2a' }}>IT</div>
-              <span className="text-white/50 text-xs tracking-[0.2em] uppercase">IV Edición · Experiencia IA</span>
+            <div className="flex items-center justify-center gap-4 mb-6">
+              <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={52} height={52} className="rounded-xl object-contain" />
+              <div className="text-left">
+                <div className="text-white/50 text-xs tracking-[0.2em] uppercase mb-1">IV Edición · Experiencia IA</div>
+                <Image src="/logo-espol.png" alt="ESPOL" width={80} height={25} className="object-contain opacity-70" />
+              </div>
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-4 text-white">
               Conecta.<br />
@@ -179,16 +188,29 @@ export default function LandingPage() {
             {SPEAKERS.map((s) => (
               <div key={s.nombre} className="speaker-card">
                 {'isPodcast' in s && s.isPodcast ? (
-                  <div className="relative w-28 h-28 rounded-2xl mb-5 overflow-hidden shrink-0 flex items-center justify-center"
-                    style={{ background: '#0a0e2a', border: '1px solid rgba(0,255,136,0.3)' }}>
-                    <Image src={s.foto} alt="Racionalmente Irracional" width={90} height={90} className="object-contain" />
+                  /* Podcast card: RR logo + 4 fotos en grid */
+                  <div className="w-full flex flex-col items-center gap-4 mb-3">
+                    <Image src={s.foto} alt="Racionalmente Irracional" width={96} height={96} className="object-contain" />
+                    <div className="grid grid-cols-4 gap-3">
+                      {'hosts' in s && s.hosts && s.hosts.map((h: { foto: string; nombre: string }) => (
+                        <div key={h.nombre} className="flex flex-col items-center gap-1.5">
+                          <div className="relative overflow-hidden neon-border"
+                            style={{ width: 56, height: 80, borderRadius: '50%', flexShrink: 0 }}>
+                            <Image src={h.foto} alt={h.nombre} fill className="object-cover object-top" />
+                          </div>
+                          <span className="text-[10px] text-white/50 text-center leading-tight">{h.nombre}</span>
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 ) : (
-                  <div className="relative w-28 h-28 rounded-full mb-5 neon-border overflow-hidden shrink-0">
-                    <Image src={s.foto} alt={s.nombre} fill className="object-cover" />
+                  /* Regular speaker: oval alargado vertical */
+                  <div className="relative mb-5 neon-border overflow-hidden shrink-0"
+                    style={{ width: 112, height: 160, borderRadius: '50%' }}>
+                    <Image src={s.foto} alt={s.nombre} fill className="object-cover object-top" />
                   </div>
                 )}
-                <h3 className="text-lg font-bold text-white mb-1">{s.nombre} {s.pais}</h3>
+                <h3 className="text-lg font-bold text-white mb-1">{s.nombre}{s.pais ? ` ${s.pais}` : ''}</h3>
                 <p className="text-sm mb-3" style={{ color: '#b5c4ff' }}>{s.cargo}</p>
                 <p className="text-sm font-semibold" style={{ color: '#00ff88' }}>{s.tema}</p>
               </div>
@@ -331,9 +353,9 @@ export default function LandingPage() {
           <div className="flex items-center justify-center gap-8 mb-8">
             <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={120} height={48} className="object-contain opacity-80" />
             <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.15)' }} />
-            <div className="text-center">
-              <div className="text-[9px] text-white/30 uppercase tracking-widest mb-0.5">Con aval académico</div>
-              <div className="font-extrabold text-2xl lowercase italic text-white/70">espol<span className="text-base align-super">®</span></div>
+            <div className="flex flex-col items-center gap-1">
+              <div className="text-[9px] text-white/30 uppercase tracking-widest">Con aval académico</div>
+              <Image src="/logo-espol.png" alt="ESPOL" width={110} height={34} className="object-contain opacity-75" />
             </div>
           </div>
 
