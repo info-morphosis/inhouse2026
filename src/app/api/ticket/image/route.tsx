@@ -130,7 +130,7 @@ export async function GET(req: NextRequest) {
               )}
             </div>
             <div style={{ color: '#00ff88', fontSize: 15, fontWeight: 700, textAlign: 'center', display: 'flex', maxWidth: 200, lineHeight: 1.3 }}>
-              Presenta en garita con tu cédula
+              Presenta tu ID en Garita
             </div>
           </div>
         </div>
