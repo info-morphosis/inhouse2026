@@ -44,9 +44,9 @@ export default function RegistroMorphosisPage() {
     <main className="min-h-screen max-w-lg mx-auto px-4 py-12">
       <div className="text-center mb-8">
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
-          CORTESÍA MORPHOSIS
+          INVITADOS MORPHOSIS
         </div>
-        <h1 className="text-2xl font-bold">Registro invitado Morphosis</h1>
+        <h1 className="text-2xl font-bold">Invitados Morphosis</h1>
         <p className="text-white/50 mt-2 text-sm">INHOUSE Tech 2026 · 20 agosto</p>
       </div>
 

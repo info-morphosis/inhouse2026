@@ -46,8 +46,8 @@ export default function RegistroVipEspolPage() {
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
           VIP ESPOL
         </div>
-        <h1 className="text-2xl font-bold">Registro especial ESPOL</h1>
-        <p className="text-white/50 mt-2 text-sm">INHOUSE Tech 2026 · 20 agosto · Cortesía Rectora ESPOL</p>
+        <h1 className="text-2xl font-bold">Registro de invitados VIP</h1>
+        <p className="text-white/50 mt-2 text-sm">INHOUSE Tech 2026 · 20 agosto</p>
       </div>
 
       <form onSubmit={handleSubmit} className="card space-y-4">
