@@ -3,10 +3,7 @@ import { useState, use } from 'react'
 
 export default function RegistroAuspiciantePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
-  const nombreAuspiciante = slug
-    .split('-')
-    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-    .join(' ')
+  const nombreAuspiciante = slug.split('-').join(' ').toUpperCase()
   const [form, setForm] = useState({
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
     email: '', codigoPais: '+593', telefono: '',

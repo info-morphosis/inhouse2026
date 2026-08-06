@@ -110,27 +110,27 @@ export async function GET(req: NextRequest) {
             </div>
           </div>
 
-          {/* Vertical divider */}
-          <div style={{ width: 1, background: 'rgba(0,255,136,0.2)', flexShrink: 0, alignSelf: 'stretch', display: 'flex' }} />
+          {/* Vertical perforated divider (Stitch style) */}
+          <div style={{ width: 0, borderLeft: '2px dashed #00ff88', opacity: 0.55, flexShrink: 0, alignSelf: 'stretch', display: 'flex' }} />
 
           {/* RIGHT — QR code */}
           <div style={{
-            width: 210, display: 'flex',
+            width: 220, display: 'flex',
             flexDirection: 'column', alignItems: 'center',
-            justifyContent: 'center', gap: 12, flexShrink: 0,
+            justifyContent: 'center', gap: 14, flexShrink: 0,
           }}>
-            <div style={{ background: 'white', padding: 10, borderRadius: 12, display: 'flex' }}>
+            <div style={{ background: 'white', padding: 12, borderRadius: 14, display: 'flex', boxShadow: '0 0 24px rgba(0,255,136,0.45)' }}>
               {qrDataUrl ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={qrDataUrl} width={180} height={180} alt="QR" />
+                <img src={qrDataUrl} width={176} height={176} alt="QR" />
               ) : (
-                <div style={{ width: 180, height: 180, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: 12 }}>
+                <div style={{ width: 176, height: 176, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: 12 }}>
                   {codigo}
                 </div>
               )}
             </div>
-            <div style={{ color: '#888', fontSize: 10, textAlign: 'center', display: 'flex' }}>
-              Presenta en garita con tu cedula
+            <div style={{ color: '#00ff88', fontSize: 15, fontWeight: 700, textAlign: 'center', display: 'flex', maxWidth: 200, lineHeight: 1.3 }}>
+              Presenta en garita con tu cédula
             </div>
           </div>
         </div>
