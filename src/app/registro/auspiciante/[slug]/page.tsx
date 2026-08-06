@@ -3,6 +3,10 @@ import { useState, use } from 'react'
 
 export default function RegistroAuspiciantePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
+  const nombreAuspiciante = slug
+    .split('-')
+    .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ')
   const [form, setForm] = useState({
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
     email: '', codigoPais: '+593', telefono: '',
@@ -45,9 +49,9 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
     <main className="min-h-screen max-w-lg mx-auto px-4 py-12">
       <div className="text-center mb-8">
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
-          REGISTRO DE TICKETS
+          AUSPICIANTE
         </div>
-        <h1 className="text-2xl font-bold">Registro de tickets</h1>
+        <h1 className="text-2xl font-bold">Registro de tickets · Auspiciante {nombreAuspiciante}</h1>
         <p className="text-white/50 mt-2 text-sm">INHOUSE Tech 2026 · 20 agosto</p>
       </div>
 
