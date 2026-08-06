@@ -1,26 +1,17 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 
-export const runtime = 'edge'
-
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const nombre = searchParams.get('nombre') || 'Asistente'
   const codigo = searchParams.get('codigo') || 'INHOUSE2026'
   const badge = searchParams.get('badge') || 'ENTRADA'
-  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(codigo)}&size=220x220&margin=6&color=0a0e2a`
+  const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(codigo)}&size=220x220&margin=6`
 
-  // Pre-fetch QR as base64 so it renders in edge ImageResponse
   let qrDataUrl = ''
   try {
     const buf = await fetch(qrUrl).then(r => r.arrayBuffer())
-    const bytes = new Uint8Array(buf)
-    let binary = ''
-    const chunk = 8192
-    for (let i = 0; i < bytes.length; i += chunk) {
-      binary += String.fromCharCode(...bytes.subarray(i, i + chunk))
-    }
-    qrDataUrl = `data:image/png;base64,${btoa(binary)}`
+    qrDataUrl = `data:image/png;base64,${Buffer.from(buf).toString('base64')}`
   } catch {
     qrDataUrl = ''
   }
