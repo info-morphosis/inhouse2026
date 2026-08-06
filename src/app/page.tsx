@@ -1,7 +1,29 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
+
+function useCountdown(targetDate: Date) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+
+  useEffect(() => {
+    const calc = () => {
+      const diff = targetDate.getTime() - Date.now()
+      if (diff <= 0) return setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 })
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      })
+    }
+    calc()
+    const id = setInterval(calc, 1000)
+    return () => clearInterval(id)
+  }, [targetDate])
+
+  return timeLeft
+}
 
 const PAQUETES = [
   { id: 'individual', label: 'Entrada Individual', cantidad: 1, precio: 120, desc: 'por persona', nota: 'Disponible hasta 24h antes del evento' },
@@ -57,9 +79,26 @@ const FEATURES = [
   'Certificado de participación digital',
 ]
 
+const EVENT_DATE = new Date('2026-08-20T15:00:00-05:00')
+
+function CountdownBlock({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex flex-col items-center gap-1">
+      <div
+        className="rounded-xl flex items-center justify-center font-extrabold text-4xl md:text-5xl w-20 md:w-24 h-20 md:h-24"
+        style={{ background: 'rgba(0,255,136,0.08)', border: '1px solid rgba(0,255,136,0.3)', color: '#00ff88', fontVariantNumeric: 'tabular-nums' }}
+      >
+        {String(value).padStart(2, '0')}
+      </div>
+      <span className="text-xs uppercase tracking-widest text-white/40 font-semibold">{label}</span>
+    </div>
+  )
+}
+
 export default function LandingPage() {
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
+  const countdown = useCountdown(EVENT_DATE)
 
   return (
     <div className="min-h-screen" style={{ background: '#0a0e2a' }}>
@@ -93,6 +132,21 @@ export default function LandingPage() {
               Inspira.
             </h1>
             <p className="text-xl text-white/60 mb-8 font-light">20 de agosto 2026 · 15H00 · Tenis Club Samborondón</p>
+
+            {/* COUNTDOWN */}
+            <div className="mb-10">
+              <p className="text-xs uppercase tracking-[0.25em] text-white/40 mb-4">El evento comienza en</p>
+              <div className="flex items-start justify-center gap-3 md:gap-4">
+                <CountdownBlock value={countdown.days} label="Días" />
+                <span className="text-3xl font-extrabold mt-6" style={{ color: '#00ff88' }}>:</span>
+                <CountdownBlock value={countdown.hours} label="Horas" />
+                <span className="text-3xl font-extrabold mt-6" style={{ color: '#00ff88' }}>:</span>
+                <CountdownBlock value={countdown.minutes} label="Min" />
+                <span className="text-3xl font-extrabold mt-6" style={{ color: '#00ff88' }}>:</span>
+                <CountdownBlock value={countdown.seconds} label="Seg" />
+              </div>
+            </div>
+
             <div className="flex flex-wrap justify-center gap-4 mb-10 text-sm">
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">🎓 Aval ESPOL</span>
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">👥 400 participantes</span>
