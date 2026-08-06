@@ -21,6 +21,17 @@ export async function POST(req: NextRequest) {
       if (error || !ticket) return NextResponse.json({ error: 'Token inválido' }, { status: 404 })
       if (ticket.asistente_registrado) return NextResponse.json({ error: 'Este ticket ya fue registrado' }, { status: 409 })
 
+      // Verificar CI duplicado en otros tickets
+      const { data: ciDupTicket } = await supabase
+        .from('tickets')
+        .select('id')
+        .eq('asistente_ci', ci_pasaporte)
+        .neq('id', ticket.id)
+        .limit(1)
+      if (ciDupTicket && ciDupTicket.length > 0) {
+        return NextResponse.json({ error: 'Este número de identificación ya tiene una entrada registrada' }, { status: 409 })
+      }
+
       const { error: upErr } = await supabase.from('tickets').update({
         asistente_nombres: nombres,
         asistente_apellidos: apellidos,
@@ -51,6 +62,26 @@ export async function POST(req: NextRequest) {
       if (cErr || !campaign) return NextResponse.json({ error: 'Enlace no válido o inactivo' }, { status: 404 })
       if (campaign.registrados >= campaign.limite) {
         return NextResponse.json({ error: 'Este enlace ha alcanzado su límite de registros' }, { status: 409 })
+      }
+
+      // Verificar CI duplicado en invitados
+      const { data: ciDupInv } = await supabase
+        .from('invitados')
+        .select('id')
+        .eq('ci_pasaporte', ci_pasaporte)
+        .limit(1)
+      if (ciDupInv && ciDupInv.length > 0) {
+        return NextResponse.json({ error: 'Este número de identificación ya está registrado' }, { status: 409 })
+      }
+
+      // Verificar CI duplicado en tickets comprados
+      const { data: ciDupTk } = await supabase
+        .from('tickets')
+        .select('id')
+        .eq('asistente_ci', ci_pasaporte)
+        .limit(1)
+      if (ciDupTk && ciDupTk.length > 0) {
+        return NextResponse.json({ error: 'Este número de identificación ya tiene una entrada registrada' }, { status: 409 })
       }
 
       // Obtener número correlativo para invitados
