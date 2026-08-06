@@ -1,6 +1,8 @@
 import { ImageResponse } from 'next/og'
 import { NextRequest } from 'next/server'
 
+export const runtime = 'edge'
+
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url)
   const nombre = searchParams.get('nombre') || 'Asistente'
@@ -8,12 +10,12 @@ export async function GET(req: NextRequest) {
   const badge = searchParams.get('badge') || 'ENTRADA'
   const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?data=${encodeURIComponent(codigo)}&size=220x220&margin=6`
 
-  let qrDataUrl = ''
+  // Fetch QR image — satori/ImageResponse accepts ArrayBuffer directly as img src
+  let qrSrc: ArrayBuffer | null = null
   try {
-    const buf = await fetch(qrUrl).then(r => r.arrayBuffer())
-    qrDataUrl = `data:image/png;base64,${Buffer.from(buf).toString('base64')}`
+    qrSrc = await fetch(qrUrl).then(r => r.arrayBuffer())
   } catch {
-    qrDataUrl = ''
+    qrSrc = null
   }
 
   return new ImageResponse(
@@ -110,11 +112,14 @@ export async function GET(req: NextRequest) {
             justifyContent: 'center', gap: 12, flexShrink: 0,
           }}>
             <div style={{ background: 'white', padding: 10, borderRadius: 12 }}>
-              {qrDataUrl
+              {qrSrc ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                ? <img src={qrDataUrl} width={180} height={180} alt="QR" />
-                : <div style={{ width: 180, height: 180, background: '#eee', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: 12 }}>QR</div>
-              }
+                <img src={qrSrc as unknown as string} width={180} height={180} alt="QR" />
+              ) : (
+                <div style={{ width: 180, height: 180, background: '#f0f0f0', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#999', fontSize: 12 }}>
+                  {codigo}
+                </div>
+              )}
             </div>
             <div style={{ color: '#666', fontSize: 10, textAlign: 'center' }}>
               Presenta en garita con tu cédula

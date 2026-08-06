@@ -1,4 +1,4 @@
-'use client'
+﻿'use client'
 import { useState } from 'react'
 
 export default function RegistroMorphosisPage() {
@@ -87,19 +87,34 @@ export default function RegistroMorphosisPage() {
         <div>
           <label className="label">WhatsApp *</label>
           <div className="flex gap-2">
-            <select className="input-field w-28 shrink-0" value={form.codigoPais}
+            <select className="input-field-compact" value={form.codigoPais}
               onChange={e => setForm(f => ({ ...f, codigoPais: e.target.value }))}>
               <option value="+593">🇪🇨 +593</option>
-              <option value="+1">🇺🇸 +1</option>
-              <option value="+34">🇪🇸 +34</option>
               <option value="+57">🇨🇴 +57</option>
               <option value="+51">🇵🇪 +51</option>
-              <option value="+52">🇲🇽 +52</option>
-              <option value="+54">🇦🇷 +54</option>
+              <option value="+58">🇻🇪 +58</option>
+              <option value="+591">🇧🇴 +591</option>
               <option value="+56">🇨🇱 +56</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+598">🇺🇾 +598</option>
+              <option value="+595">🇵🇾 +595</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+506">🇨🇷 +506</option>
               <option value="+507">🇵🇦 +507</option>
+              <option value="+502">🇬🇹 +502</option>
+              <option value="+504">🇭🇳 +504</option>
+              <option value="+503">🇸🇻 +503</option>
+              <option value="+505">🇳🇮 +505</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+55">🇧🇷 +55</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+44">🇬🇧 +44</option>
+              <option value="+33">🇫🇷 +33</option>
+              <option value="+49">🇩🇪 +49</option>
+              <option value="+39">🇮🇹 +39</option>
+              <option value="+351">🇵🇹 +351</option>
             </select>
-            <input className="input-field flex-1" placeholder="9xxxxxxxx" required
+            <input className="input-field flex-1 min-w-0" placeholder="9xxxxxxxx" required
               value={form.telefono}
               onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} />
           </div>

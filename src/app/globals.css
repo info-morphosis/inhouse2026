@@ -41,11 +41,12 @@ body {
 
 /* Cards */
 .card {
-  background-color: rgba(17, 22, 56, 0.6);
-  border: 1px solid rgba(0, 255, 136, 0.15);
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(0, 255, 136, 0.25);
   border-radius: 1rem;
   padding: 1.5rem;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(16px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255,255,255,0.07);
 }
 
 .glass-panel {
@@ -104,13 +105,33 @@ body {
 /* Form inputs */
 .input-field {
   width: 100%;
-  background-color: rgba(13, 18, 48, 0.8);
-  border: 1px solid rgba(46, 58, 92, 0.8);
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.75rem;
   padding: 0.75rem 1rem;
   color: white;
   outline: none;
   transition: border-color 150ms, box-shadow 150ms;
+}
+/* Compact variant for selects inside flex rows (e.g. WhatsApp country code) */
+.input-field-compact {
+  width: auto;
+  flex-shrink: 0;
+  background-color: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  padding: 0.75rem 0.75rem;
+  color: white;
+  outline: none;
+  transition: border-color 150ms, box-shadow 150ms;
+}
+.input-field-compact:focus {
+  border-color: var(--neon);
+  box-shadow: 0 0 0 2px rgba(0, 255, 136, 0.15);
+}
+select.input-field-compact option {
+  background-color: #1a1f3a;
+  color: white;
 }
 .input-field::placeholder { color: rgba(255, 255, 255, 0.35); }
 .input-field:focus {
