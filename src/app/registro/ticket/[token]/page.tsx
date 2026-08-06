@@ -5,7 +5,7 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
   const { token } = use(params)
   const [form, setForm] = useState({
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
-    email: '', whatsapp: '',
+    email: '', codigoPais: '+593', telefono: '',
   })
   const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -19,7 +19,7 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
       const res = await fetch('/api/registro', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'ticket', token, ...form }),
+        body: JSON.stringify({ tipo: 'ticket', token, ...form, whatsapp: form.codigoPais + form.telefono }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error')
@@ -87,8 +87,23 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
         </div>
         <div>
           <label className="label">WhatsApp *</label>
-          <input className="input-field" placeholder="+5939..." required value={form.whatsapp}
-            onChange={e => setForm(f => ({ ...f, whatsapp: e.target.value }))} />
+          <div className="flex gap-2">
+            <select className="input-field w-28 shrink-0" value={form.codigoPais}
+              onChange={e => setForm(f => ({ ...f, codigoPais: e.target.value }))}>
+              <option value="+593">🇪🇨 +593</option>
+              <option value="+1">🇺🇸 +1</option>
+              <option value="+34">🇪🇸 +34</option>
+              <option value="+57">🇨🇴 +57</option>
+              <option value="+51">🇵🇪 +51</option>
+              <option value="+52">🇲🇽 +52</option>
+              <option value="+54">🇦🇷 +54</option>
+              <option value="+56">🇨🇱 +56</option>
+              <option value="+507">🇵🇦 +507</option>
+            </select>
+            <input className="input-field flex-1" placeholder="9xxxxxxxx" required
+              value={form.telefono}
+              onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} />
+          </div>
         </div>
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
