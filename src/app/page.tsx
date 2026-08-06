@@ -112,12 +112,10 @@ export default function LandingPage() {
       {/* NAV */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10" style={{ background: 'rgba(10, 14, 42, 0.85)' }}>
         <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-3">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-4">
             <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={56} height={56} className="rounded-xl object-contain" />
-            <div className="hidden sm:flex flex-col gap-1">
-              <div className="font-extrabold text-base leading-tight text-white">INHOUSE Tech 2026</div>
-              <Image src="/logo-espol.png" alt="ESPOL" width={72} height={22} className="object-contain opacity-80" />
-            </div>
+            <div className="hidden sm:block w-px h-8 bg-white/20" />
+            <Image src="/logo-espol.png" alt="ESPOL" width={80} height={25} className="hidden sm:block object-contain opacity-80" />
           </div>
           <div className="hidden md:flex items-center gap-8">
             {['#speakers', '#agenda', '#entradas'].map((href) => (
@@ -135,12 +133,10 @@ export default function LandingPage() {
         <section className="relative flex flex-col items-center justify-center text-center px-4 pt-20 pb-24">
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,255,136,0.10) 0%, transparent 60%)' }} />
           <div className="relative z-10">
-            <div className="flex items-center justify-center gap-4 mb-6">
-              <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={52} height={52} className="rounded-xl object-contain" />
-              <div className="text-left">
-                <div className="text-white/50 text-xs tracking-[0.2em] uppercase mb-1">IV Edición · Experiencia IA</div>
-                <Image src="/logo-espol.png" alt="ESPOL" width={80} height={25} className="object-contain opacity-70" />
-              </div>
+            <div className="mb-6">
+              <span className="text-white/50 text-sm tracking-[0.18em] uppercase font-medium">
+                IV Edición · Experiencia IA 2026
+              </span>
             </div>
             <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-4 text-white">
               Conecta.<br />
