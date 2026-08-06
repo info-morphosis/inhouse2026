@@ -1,6 +1,7 @@
 'use client'
 import { useState, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
+import Link from 'next/link'
 
 const PAQUETES = {
   individual: { label: 'Entrada Individual', cantidad: 1, precio: 120 },
@@ -18,6 +19,7 @@ function CheckoutForm() {
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
     email: '', whatsapp: '', razon_social: '', ruc: '', direccion: '',
   })
+  const [politicas, setPoliticas] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
@@ -133,9 +135,37 @@ function CheckoutForm() {
           </div>
         </details>
 
+        <div className="border-t border-white/10 pt-4">
+          <div className="flex items-start gap-3 mb-4">
+            <div className="text-white/50 text-sm text-center py-1">
+              <span className="inline-block text-lg">📩</span>
+            </div>
+            <p className="text-white/50 text-sm leading-relaxed">
+              Tu ticket digital será enviado <strong className="text-white">inmediatamente</strong> por correo electrónico y WhatsApp tras confirmar el pago.
+            </p>
+          </div>
+
+          <label className="flex items-start gap-3 cursor-pointer group">
+            <input
+              type="checkbox"
+              required
+              checked={politicas}
+              onChange={e => setPoliticas(e.target.checked)}
+              className="mt-1 w-4 h-4 accent-[#00ff88] flex-shrink-0"
+            />
+            <span className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
+              He leído y acepto las{' '}
+              <Link href="/politicas" target="_blank"
+                className="underline hover:text-[#00ff88] transition-colors" style={{ color: '#00ff88' }}>
+                políticas de cancelación y devolución
+              </Link>
+            </span>
+          </label>
+        </div>
+
         {error && <p className="text-red-400 text-sm">{error}</p>}
 
-        <button type="submit" disabled={loading} className="btn-neon w-full text-center text-lg disabled:opacity-50">
+        <button type="submit" disabled={loading || !politicas} className="btn-neon w-full text-center text-lg disabled:opacity-40">
           {loading ? 'Procesando…' : `Proceder al pago — $${total}`}
         </button>
 
