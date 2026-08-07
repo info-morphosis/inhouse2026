@@ -22,22 +22,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Código no encontrado' }, { status: 404 })
     }
 
-    if (data.usado) {
-      return NextResponse.json({ ...data, error: null }, { status: 200 })
+    // Marcar como usado si es la primera vez
+    if (!data.usado) {
+      const ahora = new Date().toISOString()
+      if (data.origen === 'compra') {
+        await supabase.from('tickets')
+          .update({ usado: true, usado_at: ahora, validado_por: 'garita' })
+          .eq('codigo', codigo)
+      } else {
+        await supabase.from('invitados')
+          .update({ usado: true, usado_at: ahora, validado_por: 'garita' })
+          .eq('codigo', codigo)
+      }
     }
 
-    // Marcar como usado — actualizar tabla correcta según origen
-    const ahora = new Date().toISOString()
-    if (data.origen === 'compra') {
-      await supabase.from('tickets')
-        .update({ usado: true, usado_at: ahora, validado_por: 'garita' })
-        .eq('codigo', codigo)
-    } else {
-      await supabase.from('invitados')
-        .update({ usado: true, usado_at: ahora, validado_por: 'garita' })
-        .eq('codigo', codigo)
-    }
-
+    // Siempre retornar como acceso permitido (sin bloquear re-ingresos)
     return NextResponse.json({ ...data, usado: false })
   } catch (err) {
     console.error('[garita]', err)

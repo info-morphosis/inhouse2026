@@ -132,7 +132,7 @@ export default function GaritaPage() {
       <main className="min-h-screen flex items-center justify-center px-4" style={{ background: '#0a0e2a' }}>
         <form onSubmit={handlePin} className="card w-full max-w-xs text-center">
           <div className="text-5xl mb-4">🔐</div>
-          <h1 className="text-xl font-bold mb-1">Garita</h1>
+          <h1 className="text-xl font-bold mb-1">Control de Acceso</h1>
           <p className="text-white/40 text-sm mb-6">INHOUSE Tech 2026</p>
           <input
             type="password"
@@ -164,7 +164,7 @@ export default function GaritaPage() {
       {/* Header */}
       <div className="flex items-center justify-between mb-5">
         <div>
-          <h1 className="text-lg font-bold leading-tight">Garita <span style={{ color: '#00ff88' }}>INHOUSE 2026</span></h1>
+          <h1 className="text-lg font-bold leading-tight">Control de Acceso <span style={{ color: '#00ff88' }}>INHOUSE 2026</span></h1>
         </div>
         <button onClick={() => { stopScanner(); setAuthed(false) }}
           className="text-white/30 text-xs hover:text-white px-2 py-1">
@@ -174,20 +174,15 @@ export default function GaritaPage() {
 
       {/* Result card */}
       {scannerState === 'result' && result && (
-        <div className={`card text-center py-8 mb-5 ${result.usado ? 'border-red-500 bg-red-500/10' : 'border-[#00ff88] bg-[#00ff88]/10'}`}>
-          <div className="text-6xl mb-3">{result.usado ? '🚫' : '✅'}</div>
+        <div className="card text-center py-8 mb-5 border-[#00ff88] bg-[#00ff88]/10">
+          <div className="text-6xl mb-3">✅</div>
           <p className="text-2xl font-bold mb-1">{result.nombres} {result.apellidos}</p>
           <p className="text-white/50 text-sm mb-3">CI: {result.ci}</p>
           <span className="inline-block px-4 py-1 rounded-full text-xs font-bold mb-4"
             style={{ backgroundColor: '#00ff88', color: '#0a0e2a' }}>
             {result.badge}
           </span>
-          {result.usado
-            ? <p className="text-red-400 font-semibold text-sm">
-                Ya ingresó — {result.usado_at ? new Date(result.usado_at).toLocaleTimeString('es') : ''}
-              </p>
-            : <p className="text-[#00ff88] font-bold text-lg">ACCESO PERMITIDO</p>
-          }
+          <p className="text-[#00ff88] font-bold text-lg">ACCESO PERMITIDO</p>
           <button onClick={startScanner} className="btn-neon w-full mt-6">
             Siguiente escaneo
           </button>
