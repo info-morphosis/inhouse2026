@@ -154,9 +154,9 @@ export default function LandingPage() {
         )}
       </nav>
 
-      <main className="pt-24">
+      <main className="pt-16 sm:pt-24">
         {/* HERO */}
-        <section className="relative flex flex-col items-center justify-center text-center px-4 pt-20 pb-24">
+        <section className="relative flex flex-col items-center justify-center text-center px-4 pt-6 sm:pt-20 pb-24">
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,255,136,0.10) 0%, transparent 60%)' }} />
           <div className="relative z-10">
             <div className="mb-6">
@@ -190,9 +190,9 @@ export default function LandingPage() {
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">👥 400 participantes</span>
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">🌎 3 países</span>
             </div>
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center w-full sm:w-auto">
-              <a href="#entradas" className="btn-neon text-base px-8 py-3 w-full sm:w-auto text-center">Comprar entrada</a>
-              <a href="#agenda" className="btn-outline text-base px-8 py-3 w-full sm:w-auto text-center">Ver agenda</a>
+            <div className="flex flex-row gap-2 sm:gap-4 items-center justify-center">
+              <a href="#entradas" className="btn-neon text-sm sm:text-base px-4 sm:px-8 py-2.5 sm:py-3 text-center">Comprar entrada</a>
+              <a href="#agenda" className="btn-outline text-sm sm:text-base px-4 sm:px-8 py-2.5 sm:py-3 text-center">Ver agenda</a>
             </div>
           </div>
         </section>
