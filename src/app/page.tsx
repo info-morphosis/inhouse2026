@@ -92,12 +92,12 @@ function CountdownBlock({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center gap-1">
       <div
-        className="rounded-xl flex items-center justify-center font-extrabold text-3xl sm:text-4xl md:text-5xl w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24"
+        className="rounded-lg flex items-center justify-center font-extrabold text-xl sm:text-4xl md:text-5xl w-[52px] sm:w-20 md:w-24 h-[52px] sm:h-20 md:h-24"
         style={{ background: 'rgba(0,255,136,0.08)', border: '1px solid rgba(0,255,136,0.3)', color: '#00ff88', fontVariantNumeric: 'tabular-nums' }}
       >
         {String(value).padStart(2, '0')}
       </div>
-      <span className="text-[10px] sm:text-xs uppercase tracking-widest text-white/40 font-semibold">{label}</span>
+      <span className="text-[9px] sm:text-xs uppercase tracking-widest text-white/40 font-semibold">{label}</span>
     </div>
   )
 }
@@ -109,7 +109,7 @@ export default function LandingPage() {
   const countdown = useCountdown(EVENT_DATE)
 
   return (
-    <div className="min-h-screen" style={{ background: '#0a0e2a' }}>
+    <div className="min-h-screen overflow-x-hidden" style={{ background: '#0a0e2a' }}>
       {/* NAV */}
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10" style={{ background: 'rgba(10, 14, 42, 0.85)' }}>
         <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-3">
@@ -126,7 +126,10 @@ export default function LandingPage() {
             ))}
           </div>
           <div className="flex items-center gap-3">
-            <a href="#entradas" className="btn-neon text-sm px-4 py-2">Comprar entrada</a>
+            <a href="#entradas" className="btn-neon text-xs sm:text-sm px-3 sm:px-5 py-2">
+              <span className="sm:hidden">Entradas</span>
+              <span className="hidden sm:inline">Comprar entrada</span>
+            </a>
             <button
               onClick={() => setMenuOpen(o => !o)}
               className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
@@ -166,18 +169,18 @@ export default function LandingPage() {
               <span style={{ color: '#00ff88' }}>Transforma.</span><br />
               Inspira.
             </h1>
-            <p className="text-base sm:text-xl text-white/60 mb-8 font-light">20 de agosto 2026 · 15H00 · Tenis Club Samborondón</p>
+            <p className="text-sm sm:text-xl text-white/60 mb-8 font-light leading-snug">20 de agosto 2026 · 15H00<br className="sm:hidden" /><span className="hidden sm:inline"> · </span>Tenis Club Samborondón</p>
 
             {/* COUNTDOWN */}
             <div className="mb-10">
               <p className="text-xs uppercase tracking-[0.25em] text-white/40 mb-4">El evento comienza en</p>
-              <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4">
+              <div className="flex items-start justify-center gap-1.5 sm:gap-3 md:gap-4">
                 <CountdownBlock value={countdown.days} label="Días" />
-                <span className="text-2xl sm:text-3xl font-extrabold mt-5 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
+                <span className="text-lg sm:text-3xl font-extrabold mt-3 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
                 <CountdownBlock value={countdown.hours} label="Horas" />
-                <span className="text-2xl sm:text-3xl font-extrabold mt-5 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
+                <span className="text-lg sm:text-3xl font-extrabold mt-3 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
                 <CountdownBlock value={countdown.minutes} label="Min" />
-                <span className="text-2xl sm:text-3xl font-extrabold mt-5 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
+                <span className="text-lg sm:text-3xl font-extrabold mt-3 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
                 <CountdownBlock value={countdown.seconds} label="Seg" />
               </div>
             </div>
@@ -187,9 +190,9 @@ export default function LandingPage() {
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">👥 400 participantes</span>
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">🌎 3 países</span>
             </div>
-            <div className="flex gap-4 flex-wrap justify-center">
-              <a href="#entradas" className="btn-neon text-base px-8 py-3">Comprar entrada</a>
-              <a href="#agenda" className="btn-outline text-base px-8 py-3">Ver agenda</a>
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4 items-center w-full sm:w-auto">
+              <a href="#entradas" className="btn-neon text-base px-8 py-3 w-full sm:w-auto text-center">Comprar entrada</a>
+              <a href="#agenda" className="btn-outline text-base px-8 py-3 w-full sm:w-auto text-center">Ver agenda</a>
             </div>
           </div>
         </section>
