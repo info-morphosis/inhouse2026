@@ -33,7 +33,7 @@ export async function POST(req: NextRequest) {
     const clave = order.factura_clave
     const numeroAutorizacion = await getAuthorization(clave, 6)
 
-    const sec = Number(clave.slice(24, 33))
+    const sec = Number(clave.slice(30, 39))
     const num = `${process.env.SRI_ESTAB ?? '001'}-${process.env.SRI_PTO_EMI ?? '001'}-${pad(sec)}`
     const url = `https://srienlinea.sri.gob.ec/comprobantes-electronicos-ws/AutorizacionComprobantes?claveAcceso=${clave}`
 

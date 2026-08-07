@@ -59,7 +59,7 @@ export async function POST(req: NextRequest) {
       const result = await recibirEnSri(input, secuencial)
       claveAcceso = result.claveAcceso
 
-      const sec = Number(claveAcceso.slice(24, 33))
+      const sec = Number(claveAcceso.slice(30, 39))
       await sb.from('orders').update({
         factura_clave: claveAcceso,
         factura_secuencial: sec,
@@ -71,7 +71,7 @@ export async function POST(req: NextRequest) {
     // AUTORIZACION — 2 intentos rápidos (no bloquear demasiado)
     try {
       const numeroAutorizacion = await getAuthorization(claveAcceso, 2)
-      const sec = Number(claveAcceso.slice(24, 33))
+      const sec = Number(claveAcceso.slice(30, 39))
       const num = facturaNum(sec)
       await sb.from('orders').update({
         factura_num: num,
