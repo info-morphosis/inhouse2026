@@ -179,11 +179,10 @@ export async function sendToSri(signedXml: string): Promise<void> {
   }
 }
 
-export async function getAuthorization(clave: string): Promise<string> {
+export async function getAuthorization(clave: string, maxRetries = 6): Promise<string> {
   const url = AUTORIZACION_URL[SRI_AMBIENTE()]
   const body = `<ec:autorizacionComprobante xmlns:ec="http://ec.gob.sri.ws.autorizacion"><claveAccesoComprobante>${clave}</claveAccesoComprobante></ec:autorizacionComprobante>`
-  for (let i = 0; i < 6; i++) {
-    // Wait before each attempt: 3s on first (SRI needs time to process + old TLS conn to close), 2.5s on retries
+  for (let i = 0; i < maxRetries; i++) {
     await new Promise(r => setTimeout(r, i === 0 ? 3000 : 2500))
     try {
       const resp = await soap(url, body)
@@ -195,14 +194,22 @@ export async function getAuthorization(clave: string): Promise<string> {
     } catch (e: unknown) {
       const msg = (e as { message?: string }).message ?? String(e)
       if (msg.includes('NO AUTORIZADO')) throw e
-      if (i === 5) throw new Error(`SRI: timeout autorización (último error: ${msg})`)
-      // transient error (ECONNRESET, proxy down, etc.) — retry
+      if (i === maxRetries - 1) throw new Error(`SRI: timeout autorización (último error: ${msg})`)
     }
   }
   throw new Error('SRI: timeout autorización')
 }
 
-// ─── Main ─────────────────────────────────────────────────────────────────────
+// ─── Recepción solamente (para flujo asíncrono) ───────────────────────────────
+export async function recibirEnSri(input: FacturaInput, secuencial: number) {
+  const clave = buildClaveAcceso(input.fecha, secuencial)
+  const xmlBody = buildFacturaXml(input, secuencial, clave)
+  const signedXml = signXml(xmlBody)
+  await sendToSri(signedXml)
+  return { claveAcceso: clave }
+}
+
+// ─── Main (flujo síncrono completo) ──────────────────────────────────────────
 export async function emitirFactura(input: FacturaInput, secuencial: number) {
   const clave = buildClaveAcceso(input.fecha, secuencial)
   const xmlBody = buildFacturaXml(input, secuencial, clave)
