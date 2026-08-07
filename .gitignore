@@ -43,3 +43,6 @@ next-env.d.ts
 
 # stitch design references (local only)
 /stitch-designs/
+
+.vercel
+.env*.local
