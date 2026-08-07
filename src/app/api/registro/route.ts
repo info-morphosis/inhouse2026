@@ -4,7 +4,7 @@ import { supabase } from '@/lib/supabase'
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json()
-    const { tipo, token, slug, nombres, apellidos, tipo_id, ci_pasaporte, email, whatsapp } = body
+    const { tipo, token, slug, nombres, apellidos, tipo_id, ci_pasaporte, email, whatsapp, empresa } = body
 
     if (!nombres || !apellidos || !tipo_id || !ci_pasaporte || !email || !whatsapp) {
       return NextResponse.json({ error: 'Faltan campos requeridos' }, { status: 400 })
@@ -39,6 +39,7 @@ export async function POST(req: NextRequest) {
         asistente_ci: ci_pasaporte,
         asistente_email: email,
         asistente_whatsapp: whatsapp,
+        asistente_empresa: empresa || null,
         asistente_registrado: true,
         registrado_at: new Date().toISOString(),
       }).eq('id', ticket.id)
@@ -106,6 +107,7 @@ export async function POST(req: NextRequest) {
         nombres, apellidos, tipo_id, ci_pasaporte, email, whatsapp,
         codigo: `INHOUSE2026-I-${num}`,
         badge_tipo: badgeMap[campaign.tipo] || 'INVITADO',
+        empresa: empresa || null,
       }).select().single()
 
       if (insErr) throw insErr

@@ -92,12 +92,12 @@ function CountdownBlock({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center gap-1">
       <div
-        className="rounded-xl flex items-center justify-center font-extrabold text-4xl md:text-5xl w-20 md:w-24 h-20 md:h-24"
+        className="rounded-xl flex items-center justify-center font-extrabold text-3xl sm:text-4xl md:text-5xl w-16 sm:w-20 md:w-24 h-16 sm:h-20 md:h-24"
         style={{ background: 'rgba(0,255,136,0.08)', border: '1px solid rgba(0,255,136,0.3)', color: '#00ff88', fontVariantNumeric: 'tabular-nums' }}
       >
         {String(value).padStart(2, '0')}
       </div>
-      <span className="text-xs uppercase tracking-widest text-white/40 font-semibold">{label}</span>
+      <span className="text-[10px] sm:text-xs uppercase tracking-widest text-white/40 font-semibold">{label}</span>
     </div>
   )
 }
@@ -105,6 +105,7 @@ function CountdownBlock({ value, label }: { value: number; label: string }) {
 export default function LandingPage() {
   const router = useRouter()
   const [selected, setSelected] = useState<string | null>(null)
+  const [menuOpen, setMenuOpen] = useState(false)
   const countdown = useCountdown(EVENT_DATE)
 
   return (
@@ -113,7 +114,7 @@ export default function LandingPage() {
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10" style={{ background: 'rgba(10, 14, 42, 0.85)' }}>
         <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-3">
           <div className="flex items-center gap-4">
-            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={56} height={56} className="rounded-xl object-contain" />
+            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={48} height={48} className="rounded-xl object-contain" />
             <div className="hidden sm:block w-px h-8 bg-white/20" />
             <Image src="/logo-espol.png" alt="ESPOL" width={80} height={25} className="hidden sm:block object-contain opacity-80" />
           </div>
@@ -124,8 +125,30 @@ export default function LandingPage() {
               </a>
             ))}
           </div>
-          <a href="#entradas" className="btn-neon text-sm px-5 py-2">Comprar entrada</a>
+          <div className="flex items-center gap-3">
+            <a href="#entradas" className="btn-neon text-sm px-4 py-2">Comprar entrada</a>
+            <button
+              onClick={() => setMenuOpen(o => !o)}
+              className="md:hidden flex flex-col justify-center items-center w-10 h-10 gap-1.5"
+              aria-label="Menú"
+            >
+              <span className="block w-6 h-0.5 bg-white transition-all" style={menuOpen ? { transform: 'translateY(8px) rotate(45deg)' } : {}} />
+              <span className="block w-6 h-0.5 bg-white transition-all" style={menuOpen ? { opacity: 0 } : {}} />
+              <span className="block w-6 h-0.5 bg-white transition-all" style={menuOpen ? { transform: 'translateY(-8px) rotate(-45deg)' } : {}} />
+            </button>
+          </div>
         </div>
+        {/* Mobile menu */}
+        {menuOpen && (
+          <div className="md:hidden border-t border-white/10 px-5 py-4 flex flex-col gap-4" style={{ background: 'rgba(10,14,42,0.97)' }}>
+            {[['#speakers', 'Speakers'], ['#agenda', 'Agenda'], ['#entradas', 'Entradas']].map(([href, label]) => (
+              <a key={href} href={href} onClick={() => setMenuOpen(false)}
+                className="text-sm font-semibold uppercase tracking-widest text-white/70 hover:text-[#00ff88] transition-colors">
+                {label}
+              </a>
+            ))}
+          </div>
+        )}
       </nav>
 
       <main className="pt-24">
@@ -138,23 +161,23 @@ export default function LandingPage() {
                 IV Edición · Experiencia IA 2026
               </span>
             </div>
-            <h1 className="text-5xl md:text-7xl font-extrabold leading-[1.1] mb-4 text-white">
+            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-[1.1] mb-4 text-white">
               Conecta.<br />
               <span style={{ color: '#00ff88' }}>Transforma.</span><br />
               Inspira.
             </h1>
-            <p className="text-xl text-white/60 mb-8 font-light">20 de agosto 2026 · 15H00 · Tenis Club Samborondón</p>
+            <p className="text-base sm:text-xl text-white/60 mb-8 font-light">20 de agosto 2026 · 15H00 · Tenis Club Samborondón</p>
 
             {/* COUNTDOWN */}
             <div className="mb-10">
               <p className="text-xs uppercase tracking-[0.25em] text-white/40 mb-4">El evento comienza en</p>
-              <div className="flex items-start justify-center gap-3 md:gap-4">
+              <div className="flex items-start justify-center gap-2 sm:gap-3 md:gap-4">
                 <CountdownBlock value={countdown.days} label="Días" />
-                <span className="text-3xl font-extrabold mt-6" style={{ color: '#00ff88' }}>:</span>
+                <span className="text-2xl sm:text-3xl font-extrabold mt-5 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
                 <CountdownBlock value={countdown.hours} label="Horas" />
-                <span className="text-3xl font-extrabold mt-6" style={{ color: '#00ff88' }}>:</span>
+                <span className="text-2xl sm:text-3xl font-extrabold mt-5 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
                 <CountdownBlock value={countdown.minutes} label="Min" />
-                <span className="text-3xl font-extrabold mt-6" style={{ color: '#00ff88' }}>:</span>
+                <span className="text-2xl sm:text-3xl font-extrabold mt-5 sm:mt-6" style={{ color: '#00ff88' }}>:</span>
                 <CountdownBlock value={countdown.seconds} label="Seg" />
               </div>
             </div>
@@ -346,9 +369,9 @@ export default function LandingPage() {
       <footer className="border-t border-white/10 py-12 mt-8" style={{ background: '#050814' }}>
         <div className="max-w-7xl mx-auto px-5 lg:px-16">
           {/* Logos */}
-          <div className="flex items-center justify-center gap-8 mb-8">
-            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={120} height={48} className="object-contain opacity-80" />
-            <div style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.15)' }} />
+          <div className="flex flex-wrap items-center justify-center gap-6 mb-8">
+            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={100} height={40} className="object-contain opacity-80" />
+            <div className="hidden sm:block" style={{ width: 1, height: 40, background: 'rgba(255,255,255,0.15)' }} />
             <div className="flex flex-col items-center gap-1">
               <div className="text-[9px] text-white/30 uppercase tracking-widest">Con aval académico</div>
               <Image src="/logo-espol.png" alt="ESPOL" width={110} height={34} className="object-contain opacity-75" />

@@ -108,6 +108,16 @@ export async function GET(req: NextRequest) {
               </div>
             </div>
 
+            {/* Instructions */}
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 10 }}>
+              <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11, display: 'flex' }}>
+                Presenta tu cedula en la garita de ingreso al Tenis Club.
+              </div>
+              <div style={{ color: 'rgba(255,255,255,0.75)', fontSize: 11, display: 'flex' }}>
+                El codigo QR en el salon de eventos.
+              </div>
+            </div>
+
             {/* Spacer */}
             <div style={{ flex: 1, display: 'flex' }} />
 
@@ -150,9 +160,6 @@ export async function GET(req: NextRequest) {
                   {codigo}
                 </div>
               )}
-            </div>
-            <div style={{ color: '#00ff88', fontSize: 15, fontWeight: 700, textAlign: 'center', display: 'flex', maxWidth: 200, lineHeight: 1.3 }}>
-              Presenta tu ID en Garita
             </div>
           </div>
         </div>

@@ -7,7 +7,7 @@ const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
 export const supabase = createClient(supabaseUrl, supabaseServiceKey)
 
 export type Paquete = 'individual' | 'pack5' | 'pack10'
-export type TipoId = 'cedula' | 'pasaporte' | 'licencia'
+export type TipoId = 'cedula' | 'pasaporte'
 export type OrderEstado = 'pending' | 'paid' | 'failed' | 'refunded'
 
 export const PAQUETES = {

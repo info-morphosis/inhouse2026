@@ -22,6 +22,7 @@ function CheckoutForm() {
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
     email: '', whatsapp: '', razon_social: '', ruc: '', direccion: '',
   })
+  const [privacidad, setPrivacidad] = useState(false)
   const [politicas, setPoliticas] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
@@ -74,7 +75,7 @@ function CheckoutForm() {
       <form onSubmit={handleSubmit} className="card space-y-5">
         <h2 className="text-xl font-bold mb-2">Datos del comprador</h2>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Nombres *</label>
             <input className="input-field" required value={form.nombres}
@@ -87,14 +88,13 @@ function CheckoutForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="label">Tipo de ID *</label>
             <select className="input-field" value={form.tipo_id}
               onChange={e => setForm(f => ({ ...f, tipo_id: e.target.value }))}>
               <option value="cedula">Cédula</option>
               <option value="pasaporte">Pasaporte</option>
-              <option value="licencia">Licencia</option>
             </select>
           </div>
           <div>
@@ -126,7 +126,7 @@ function CheckoutForm() {
               <input className="input-field" value={form.razon_social}
                 onChange={e => setForm(f => ({ ...f, razon_social: e.target.value }))} />
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="label">RUC</label>
                 <input className="input-field" value={form.ruc}
@@ -155,6 +155,23 @@ function CheckoutForm() {
             <input
               type="checkbox"
               required
+              checked={privacidad}
+              onChange={e => setPrivacidad(e.target.checked)}
+              className="mt-1 w-4 h-4 accent-[#00ff88] flex-shrink-0"
+            />
+            <span className="text-white/60 text-sm group-hover:text-white/80 transition-colors">
+              He leído y acepto la{' '}
+              <Link href="/privacidad" target="_blank"
+                className="underline hover:text-[#00ff88] transition-colors" style={{ color: '#00ff88' }}>
+                Política de Protección de Datos Personales
+              </Link>
+            </span>
+          </label>
+
+          <label className="flex items-start gap-3 cursor-pointer group mt-3">
+            <input
+              type="checkbox"
+              required
               checked={politicas}
               onChange={e => setPoliticas(e.target.checked)}
               className="mt-1 w-4 h-4 accent-[#00ff88] flex-shrink-0"
@@ -163,7 +180,7 @@ function CheckoutForm() {
               He leído y acepto las{' '}
               <Link href="/politicas" target="_blank"
                 className="underline hover:text-[#00ff88] transition-colors" style={{ color: '#00ff88' }}>
-                políticas de privacidad, cancelación y devolución
+                Políticas de Cancelación y Devolución
               </Link>
             </span>
           </label>
@@ -171,7 +188,7 @@ function CheckoutForm() {
 
         {error && <p className="text-red-400 text-sm">{error}</p>}
 
-        <button type="submit" disabled={loading || !politicas} className="btn-neon w-full text-center text-lg disabled:opacity-40">
+        <button type="submit" disabled={loading || !privacidad || !politicas} className="btn-neon w-full text-center text-lg disabled:opacity-40">
           {loading ? 'Procesando…' : `Proceder al pago — $${total}`}
         </button>
 
