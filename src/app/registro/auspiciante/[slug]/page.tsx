@@ -90,8 +90,8 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
             <input className="input-field flex-1 min-w-0" placeholder="9xxxxxxxx" required value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} />
           </div>
         </div>
-        <div><label className="label">Empresa</label>
-          <input className="input-field" placeholder="Nombre de empresa u organización (opcional)" value={form.empresa} onChange={e => setForm(f => ({ ...f, empresa: e.target.value }))} /></div>
+        <div><label className="label">Empresa *</label>
+          <input className="input-field" placeholder="Nombre de empresa u organización" required value={form.empresa} onChange={e => setForm(f => ({ ...f, empresa: e.target.value }))} /></div>
         {error && <p className="text-red-400 text-sm">{error}</p>}
         <button type="submit" disabled={loading} className="btn-neon w-full text-center disabled:opacity-50">
           {loading ? 'Registrando…' : 'Confirmar registro'}

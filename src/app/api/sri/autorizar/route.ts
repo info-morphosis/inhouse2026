@@ -1,13 +1,8 @@
 export const runtime = 'nodejs'
 
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
 import { getAuthorization } from '@/lib/sri'
-
-const sb = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
+import { supabase as sb } from '@/lib/supabase'
 
 function pad(n: number, d = 9) { return String(n).padStart(d, '0') }
 
