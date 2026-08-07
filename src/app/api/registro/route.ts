@@ -84,9 +84,16 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ error: 'Este número de identificación ya tiene una entrada registrada' }, { status: 409 })
       }
 
-      // Obtener número correlativo para invitados
-      const { count } = await supabase.from('invitados').select('*', { count: 'exact', head: true })
-      const num = String((count || 0) + 1).padStart(4, '0')
+      // Obtener número correlativo para invitados (MAX para evitar colisiones por borrados)
+      const { data: maxRow } = await supabase
+        .from('invitados')
+        .select('codigo')
+        .order('codigo', { ascending: false })
+        .limit(1)
+      const lastNum = maxRow?.[0]?.codigo
+        ? parseInt(maxRow[0].codigo.replace('INHOUSE2026-I-', ''), 10)
+        : 0
+      const num = String(lastNum + 1).padStart(4, '0')
 
       const badgeMap: Record<string, string> = {
         auspiciante: 'AUSPICIANTE',
