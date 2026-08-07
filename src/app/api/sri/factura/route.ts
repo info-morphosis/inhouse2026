@@ -37,8 +37,8 @@ export async function POST(req: NextRequest) {
 
     // RECEPCION — solo si no tiene clave aún
     if (!claveAcceso) {
-      const { data: sec } = await sb.rpc('next_sri_secuencial')
-      const secuencial = sec as number
+      const { data: secRpc } = await sb.rpc('next_sri_secuencial')
+      const secuencial = secRpc as number
 
       const tipoId = (order.ruc ? 'ruc' : order.tipo_id === 'pasaporte' ? 'pasaporte' : 'cedula') as BuyerInfo['tipoId']
       const identificacion = order.ruc || order.ci_pasaporte
