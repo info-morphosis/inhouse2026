@@ -5,6 +5,7 @@ import Link from 'next/link'
 import EventHeader from '@/components/EventHeader'
 import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
+import { normalizarWhatsappEc } from '@/lib/phone'
 
 const PAQUETES = {
   individual: { label: 'Entrada Individual', cantidad: 1, precio: 120 },
@@ -37,7 +38,7 @@ function CheckoutForm() {
       const res = await fetch('/api/checkout', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ...form, paquete: paqueteId }),
+        body: JSON.stringify({ ...form, whatsapp: normalizarWhatsappEc(form.whatsapp), paquete: paqueteId }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al procesar')
@@ -111,9 +112,15 @@ function CheckoutForm() {
         </div>
 
         <div>
-          <label className="label">WhatsApp (con código país) *</label>
-          <input className="input-field" placeholder="+5939..." required value={form.whatsapp}
-            onChange={e => setForm(f => ({ ...f, whatsapp: e.target.value }))} />
+          <label className="label">WhatsApp *</label>
+          <div className="flex gap-2">
+            <span className="input-field-compact flex items-center font-medium text-white/80 select-none">🇪🇨 +593</span>
+            <input className="input-field flex-1 min-w-0" type="tel" inputMode="numeric" maxLength={10}
+              pattern="0[0-9]{9}" title="Ingresa 10 dígitos que empiezan con 0 (ej: 0987654321)"
+              placeholder="0987654321" required value={form.whatsapp}
+              onChange={e => setForm(f => ({ ...f, whatsapp: e.target.value.replace(/\D/g, '').slice(0, 10) }))} />
+          </div>
+          <p className="text-white/40 text-xs mt-1">Número de 10 dígitos que empieza con 0.</p>
         </div>
 
         <details className="border-t border-white/10 pt-4">

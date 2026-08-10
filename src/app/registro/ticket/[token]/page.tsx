@@ -3,20 +3,13 @@ import { useState, use } from 'react'
 import EventHeader from '@/components/EventHeader'
 import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
-
-const PAISES = [
-  ['+593','🇪🇨'],['+57','🇨🇴'],['+51','🇵🇪'],['+58','🇻🇪'],['+591','🇧🇴'],
-  ['+56','🇨🇱'],['+54','🇦🇷'],['+598','🇺🇾'],['+595','🇵🇾'],['+52','🇲🇽'],
-  ['+506','🇨🇷'],['+507','🇵🇦'],['+502','🇬🇹'],['+504','🇭🇳'],['+503','🇸🇻'],
-  ['+505','🇳🇮'],['+1','🇺🇸'],['+55','🇧🇷'],['+34','🇪🇸'],['+44','🇬🇧'],
-  ['+33','🇫🇷'],['+49','🇩🇪'],['+39','🇮🇹'],['+351','🇵🇹'],
-]
+import { normalizarWhatsappEc } from '@/lib/phone'
 
 export default function RegistroTicketPage({ params }: { params: Promise<{ token: string }> }) {
   const { token } = use(params)
   const [form, setForm] = useState({
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
-    email: '', codigoPais: '+593', telefono: '', empresa: '',
+    email: '', telefono: '', empresa: '',
   })
   const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
@@ -28,7 +21,7 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
     try {
       const res = await fetch('/api/registro', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'ticket', token, ...form, whatsapp: form.codigoPais + form.telefono, empresa: form.empresa }),
+        body: JSON.stringify({ tipo: 'ticket', token, ...form, whatsapp: normalizarWhatsappEc(form.telefono), empresa: form.empresa }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error')
@@ -83,11 +76,10 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
           <input className="input-field" type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} /></div>
         <div><label className="label">WhatsApp *</label>
           <div className="flex gap-2">
-            <select className="input-field-compact" value={form.codigoPais} onChange={e => setForm(f => ({ ...f, codigoPais: e.target.value }))}>
-              {PAISES.map(([c, f]) => <option key={c} value={c}>{f} {c}</option>)}
-            </select>
-            <input className="input-field flex-1 min-w-0" placeholder="9xxxxxxxx" required value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value }))} />
+            <span className="input-field-compact flex items-center font-medium text-white/80 select-none">🇪🇨 +593</span>
+            <input className="input-field flex-1 min-w-0" type="tel" inputMode="numeric" maxLength={10} pattern="0[0-9]{9}" title="Ingresa 10 dígitos que empiezan con 0 (ej: 0987654321)" placeholder="0987654321" required value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value.replace(/\D/g, '').slice(0, 10) }))} />
           </div>
+          <p className="text-white/40 text-xs mt-1">Número de 10 dígitos que empieza con 0.</p>
         </div>
         <div><label className="label">Empresa *</label>
           <input className="input-field" placeholder="Nombre de empresa u organización" required value={form.empresa} onChange={e => setForm(f => ({ ...f, empresa: e.target.value }))} /></div>
