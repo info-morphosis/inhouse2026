@@ -73,15 +73,17 @@ export default function RegistroMorphosisPage() {
         </div>
         <div><label className="label">Email *</label>
           <input className="input-field" type="email" required value={form.email} onChange={e => setForm(f => ({ ...f, email: e.target.value }))} /></div>
-        <div><label className="label">WhatsApp *</label>
-          <div className="flex gap-2">
-            <span className="input-field-compact flex items-center font-medium text-white/80 select-none">🇪🇨 +593</span>
-            <input className="input-field flex-1 min-w-0" type="tel" inputMode="numeric" maxLength={10} pattern="0[0-9]{9}" title="Ingresa 10 dígitos que empiezan con 0 (ej: 0987654321)" placeholder="0987654321" required value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value.replace(/\D/g, '').slice(0, 10) }))} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div><label className="label">WhatsApp *</label>
+            <div className="flex gap-2">
+              <span className="input-field-compact flex items-center font-medium text-white/80 select-none">🇪🇨 +593</span>
+              <input className="input-field flex-1 min-w-0" type="tel" inputMode="numeric" maxLength={10} pattern="0[0-9]{9}" title="Ingresa 10 dígitos que empiezan con 0 (ej: 0987654321)" placeholder="0987654321" required value={form.telefono} onChange={e => setForm(f => ({ ...f, telefono: e.target.value.replace(/\D/g, '').slice(0, 10) }))} />
+            </div>
+            <p className="text-white/40 text-xs mt-1">10 dígitos que inician con 0.</p>
           </div>
-          <p className="text-white/40 text-xs mt-1">Número de 10 dígitos que empieza con 0.</p>
+          <div><label className="label">Empresa *</label>
+            <input className="input-field" placeholder="Nombre de empresa u organización" required value={form.empresa} onChange={e => setForm(f => ({ ...f, empresa: e.target.value }))} /></div>
         </div>
-        <div><label className="label">Empresa *</label>
-          <input className="input-field" placeholder="Nombre de empresa u organización" required value={form.empresa} onChange={e => setForm(f => ({ ...f, empresa: e.target.value }))} /></div>
         {error && <p className="text-red-400 text-sm">{error}</p>}
         <button type="submit" disabled={loading} className="btn-neon w-full text-center disabled:opacity-50">
           {loading ? 'Registrando…' : 'Confirmar registro'}
