@@ -34,7 +34,7 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
 
   if (done) return (
     <>
-    <EventHeader />
+    <EventHeader showWordmark={false} />
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="card max-w-md w-full text-center py-10">
         <div className="text-6xl mb-4">✅</div>
@@ -48,7 +48,7 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
 
   return (
     <>
-    <EventHeader />
+    <EventHeader showWordmark={false} />
     <main className="max-w-lg mx-auto px-4 py-8">
       <LogoBadge />
       <div className="text-center mb-8">
