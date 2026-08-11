@@ -114,9 +114,9 @@ export default function LandingPage() {
       <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10" style={{ background: 'rgba(10, 14, 42, 0.85)' }}>
         <div className="flex justify-between items-center max-w-7xl mx-auto px-5 lg:px-16 py-3">
           <div className="flex items-center gap-4">
-            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={48} height={48} className="rounded-xl object-contain" />
-            <div className="hidden sm:block w-px h-8 bg-white/20" />
-            <Image src="/logo-espol.png" alt="ESPOL" width={80} height={25} className="hidden sm:block object-contain opacity-80" />
+            <Image src="/logo-inhouse.png" alt="INHOUSE Tech" width={96} height={60} className="object-contain" style={{ maxHeight: 60 }} />
+            <div className="hidden sm:block w-px h-10 bg-white/20" />
+            <Image src="/logo-espol.png" alt="ESPOL" width={100} height={31} className="hidden sm:block object-contain opacity-80" />
           </div>
           <div className="hidden md:flex items-center gap-8">
             {['#speakers', '#agenda', '#entradas'].map((href) => (
@@ -154,7 +154,7 @@ export default function LandingPage() {
         )}
       </nav>
 
-      <main className="pt-16 sm:pt-24">
+      <main className="pt-24 sm:pt-28">
         {/* HERO */}
         <section className="relative flex flex-col items-center justify-center text-center px-4 pt-6 sm:pt-20 pb-24">
           <div className="absolute inset-0 pointer-events-none" style={{ background: 'radial-gradient(ellipse 80% 60% at 50% -10%, rgba(0,255,136,0.10) 0%, transparent 60%)' }} />
