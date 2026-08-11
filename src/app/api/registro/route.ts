@@ -100,6 +100,7 @@ export async function POST(req: NextRequest) {
         auspiciante: 'AUSPICIANTE',
         vip_espol: 'VIP ESPOL',
         morphosis: 'CORTESÍA MORPHOSIS',
+        especiales: 'INVITADO ESPECIAL',
       }
 
       const { data: invitado, error: insErr } = await supabase.from('invitados').insert({

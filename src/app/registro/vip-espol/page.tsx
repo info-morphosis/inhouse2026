@@ -54,7 +54,7 @@ export default function RegistroVipEspolPage() {
           VIP ESPOL
         </div>
         <h1 className="text-2xl font-bold">Registro de invitados VIP</h1>
-        <p className="text-white/50 mt-2 text-sm">INHOUSE Tech 2026 · 20 agosto</p>
+        <p className="text-white/50 mt-2 text-sm">20 agosto · Tenis Club Samborondón</p>
       </div>
       <form onSubmit={handleSubmit} className="card space-y-4">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

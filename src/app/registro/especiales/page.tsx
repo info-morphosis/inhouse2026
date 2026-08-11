@@ -1,13 +1,11 @@
 'use client'
-import { useState, use } from 'react'
+import { useState } from 'react'
 import EventHeader from '@/components/EventHeader'
 import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
 import { normalizarWhatsappEc } from '@/lib/phone'
 
-export default function RegistroAuspiciantePage({ params }: { params: Promise<{ slug: string }> }) {
-  const { slug } = use(params)
-  const nombreAuspiciante = slug.split('-').join(' ').toUpperCase()
+export default function RegistroEspecialesPage() {
   const [form, setForm] = useState({
     nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
     email: '', telefono: '', empresa: '',
@@ -22,7 +20,7 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
     try {
       const res = await fetch('/api/registro', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ tipo: 'auspiciante', slug, ...form, whatsapp: normalizarWhatsappEc(form.telefono), empresa: form.empresa }),
+        body: JSON.stringify({ tipo: 'campana', slug: 'especiales', ...form, whatsapp: normalizarWhatsappEc(form.telefono), empresa: form.empresa }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error')
@@ -38,7 +36,7 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
     <main className="min-h-screen flex items-center justify-center px-4">
       <div className="card max-w-md w-full text-center py-10">
         <div className="text-6xl mb-4">✅</div>
-        <h1 className="text-2xl font-bold mb-3">¡Registro completado!</h1>
+        <h1 className="text-2xl font-bold mb-3">¡Registro confirmado!</h1>
         <p className="text-white/60">Tu ticket QR llegará por email y WhatsApp.</p>
       </div>
     </main>
@@ -53,9 +51,9 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
       <LogoBadge />
       <div className="text-center mb-8">
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
-          AUSPICIANTE
+          INVITADOS ESPECIALES
         </div>
-        <h1 className="text-2xl font-bold">Registro de tickets · Auspiciante {nombreAuspiciante}</h1>
+        <h1 className="text-2xl font-bold">Invitados Especiales</h1>
         <p className="text-white/50 mt-2 text-sm">20 agosto · Tenis Club Samborondón</p>
       </div>
       <form onSubmit={handleSubmit} className="card space-y-4">

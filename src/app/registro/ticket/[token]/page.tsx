@@ -52,7 +52,7 @@ export default function RegistroTicketPage({ params }: { params: Promise<{ token
       <LogoBadge />
       <div className="text-center mb-8">
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
-          ENTRADA INHOUSE TECH 2026
+          ENTRADA
         </div>
         <h1 className="text-2xl font-bold">Completa tu registro</h1>
         <p className="text-white/50 mt-2 text-sm">20 agosto · Tenis Club Samborondón</p>
