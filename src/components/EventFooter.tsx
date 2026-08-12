@@ -17,12 +17,19 @@ export default function EventFooter() {
           WhatsApp +593 98 430 9726
         </a>
       </div>
-      <p className="text-white/20 text-xs">
-        Morphosis Digital ·{' '}
-        <Link href="/politicas" className="hover:text-white/50 transition-colors underline">
-          Políticas de cancelación
+      <div className="flex flex-wrap justify-center gap-x-4 gap-y-1 text-white/30 text-xs mb-2">
+        <Link href="/terminos" className="hover:text-white/60 transition-colors underline">
+          Términos y condiciones
         </Link>
-        {' '}· © 2026 INHOUSE Tech IV Edición
+        <Link href="/privacidad" className="hover:text-white/60 transition-colors underline">
+          Política de privacidad
+        </Link>
+        <Link href="/politicas" className="hover:text-white/60 transition-colors underline">
+          Cancelación y devolución
+        </Link>
+      </div>
+      <p className="text-white/20 text-xs">
+        Morphosis Digital · © 2026 INHOUSE Tech IV Edición
       </p>
     </footer>
   )
