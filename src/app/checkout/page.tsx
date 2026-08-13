@@ -20,7 +20,7 @@ function CheckoutForm() {
   const paquete = PAQUETES[paqueteId] || PAQUETES.individual
 
   const [form, setForm] = useState({
-    nombres: '', apellidos: '', tipo_id: 'cedula', ci_pasaporte: '',
+    nombres: '', apellidos: '', tipo_id: 'cedula' as const, ci_pasaporte: '',
     email: '', whatsapp: '', razon_social: '', ruc: '', direccion: '',
   })
   const [privacidad, setPrivacidad] = useState(false)
@@ -42,11 +42,11 @@ function CheckoutForm() {
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al procesar')
-      // Datafast: redirigir al widget de pago
-      if (data.checkoutUrl) {
-        window.location.href = data.checkoutUrl
+      // Datafast: ir al widget de pago con el checkoutId
+      if (data.checkoutId) {
+        router.push(`/pago?checkoutId=${data.checkoutId}`)
       } else {
-        router.push(`/confirmacion?order=${data.orderId}`)
+        router.push(`/confirmacion?order=${data.orderId}&estado=ok`)
       }
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : 'Error inesperado')
@@ -89,26 +89,27 @@ function CheckoutForm() {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label className="label">Tipo de ID *</label>
-            <select className="input-field" value={form.tipo_id}
-              onChange={e => setForm(f => ({ ...f, tipo_id: e.target.value }))}>
-              <option value="cedula">Cédula</option>
-              <option value="pasaporte">Pasaporte</option>
-            </select>
-          </div>
-          <div>
-            <label className="label">Número de ID *</label>
-            <input className="input-field" required value={form.ci_pasaporte}
-              onChange={e => setForm(f => ({ ...f, ci_pasaporte: e.target.value }))} />
-          </div>
+        <div>
+          <label className="label">Cédula *</label>
+          <input className="input-field" type="text" inputMode="numeric" maxLength={10}
+            pattern="[0-9]{10}" title="Ingresa los 10 dígitos de tu cédula"
+            placeholder="0102030405" required value={form.ci_pasaporte}
+            onChange={e => setForm(f => ({ ...f, ci_pasaporte: e.target.value.replace(/\D/g, '').slice(0, 10) }))} />
+          <p className="text-white/40 text-xs mt-1">Cédula ecuatoriana de 10 dígitos (requerida por el banco).</p>
         </div>
 
         <div>
           <label className="label">Correo electrónico *</label>
           <input className="input-field" type="email" required value={form.email}
             onChange={e => setForm(f => ({ ...f, email: e.target.value }))} />
+        </div>
+
+        <div>
+          <label className="label">Dirección *</label>
+          <input className="input-field" required value={form.direccion}
+            placeholder="Calle principal y secundaria, ciudad"
+            onChange={e => setForm(f => ({ ...f, direccion: e.target.value }))} />
+          <p className="text-white/40 text-xs mt-1">Requerida por Datafast para la validación del pago.</p>
         </div>
 
         <div>
@@ -124,23 +125,16 @@ function CheckoutForm() {
           <summary className="text-white/50 text-sm cursor-pointer hover:text-white">
             Datos de facturación (opcional)
           </summary>
-          <div className="mt-4 space-y-4">
+          <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="label">Razón social</label>
               <input className="input-field" value={form.razon_social}
                 onChange={e => setForm(f => ({ ...f, razon_social: e.target.value }))} />
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div>
-                <label className="label">RUC</label>
-                <input className="input-field" value={form.ruc}
-                  onChange={e => setForm(f => ({ ...f, ruc: e.target.value }))} />
-              </div>
-              <div>
-                <label className="label">Dirección</label>
-                <input className="input-field" value={form.direccion}
-                  onChange={e => setForm(f => ({ ...f, direccion: e.target.value }))} />
-              </div>
+            <div>
+              <label className="label">RUC</label>
+              <input className="input-field" value={form.ruc}
+                onChange={e => setForm(f => ({ ...f, ruc: e.target.value }))} />
             </div>
           </div>
         </details>
