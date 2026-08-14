@@ -151,3 +151,29 @@ select.input-field option {
   background-color: #1a1f3a;
   color: white;
 }
+
+/* ── Widget de pago Datafast (COPYandPAY / wpwl) ──
+   El widget copia el color y tipografía del contenedor .wpwl-control a sus
+   campos (incluido el iframe del número de tarjeta y CVV). El tema oscuro del
+   sitio dejaba el texto blanco sobre blanco = invisible al escribir.
+   Forzamos texto oscuro sobre fondo claro para que los números se vean. */
+.wpwl-form { background: #ffffff; border-radius: 12px; padding: 10px 14px 6px; }
+.wpwl-label { color: #33405c !important; }
+.wpwl-group { margin-bottom: 10px; }
+.wpwl-control,
+.wpwl-control:focus {
+  color: #0a0e2a !important;
+  background: #ffffff !important;
+  border: 1px solid #cdd4e4 !important;
+  border-radius: 8px !important;
+  -webkit-text-fill-color: #0a0e2a !important;
+}
+.wpwl-control::placeholder { color: #9aa3b8 !important; }
+.wpwl-brand { color: #0a0e2a; }
+.wpwl-button-pay {
+  background: #00b26a !important;
+  border-color: #00b26a !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  border-radius: 999px !important;
+}
