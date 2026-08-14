@@ -1,7 +1,7 @@
 'use client'
 import { useState, useCallback } from 'react'
 
-type Tab = 'resumen' | 'tickets' | 'invitados' | 'ingresados' | 'facturas'
+type Tab = 'resumen' | 'tickets' | 'invitados' | 'ingresados' | 'facturas' | 'transacciones'
 
 type Stats = {
   orders: { total: number; pagados: number; recaudado: number }
@@ -43,6 +43,8 @@ export default function AdminPage() {
   const [search, setSearch] = useState('')
   const [retrying, setRetrying] = useState<string | null>(null)
   const [retryMsg, setRetryMsg] = useState<Record<string, string>>({})
+  const [anulando, setAnulando] = useState<string | null>(null)
+  const [anulMsg, setAnulMsg] = useState<Record<string, string>>({})
 
   const fetchData = useCallback(async (view: string, currentPin: string) => {
     setLoading(true)
@@ -122,8 +124,33 @@ export default function AdminPage() {
     }
   }
 
+  const anularOrden = async (orderId: string) => {
+    if (!confirm('¿Seguro que deseas anular esta transacción? Esta acción genera un RF en Datafast.')) return
+    setAnulando(orderId)
+    setAnulMsg(m => ({ ...m, [orderId]: 'Procesando anulación…' }))
+    try {
+      const res = await fetch('/api/admin/anular', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ pin: pinVal, orderId }),
+      })
+      const json = await res.json()
+      if (json.ok) {
+        setAnulMsg(m => ({ ...m, [orderId]: `✅ Anulada — Ref: ${json.refNbr ?? json.code}` }))
+        fetchData('transacciones', pinVal)
+      } else {
+        setAnulMsg(m => ({ ...m, [orderId]: `❌ ${json.error ?? json.description ?? json.code}` }))
+      }
+    } catch {
+      setAnulMsg(m => ({ ...m, [orderId]: '❌ Error de conexión' }))
+    } finally {
+      setAnulando(null)
+    }
+  }
+
   const TABS: { id: Tab; label: string }[] = [
     { id: 'resumen', label: 'Resumen' },
+    { id: 'transacciones', label: 'Transacciones' },
     { id: 'tickets', label: 'Tickets vendidos' },
     { id: 'invitados', label: 'Invitados' },
     { id: 'ingresados', label: 'Ingresados' },
@@ -201,6 +228,110 @@ export default function AdminPage() {
                 </tbody>
               </table>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* TRANSACCIONES */}
+      {!loading && tab === 'transacciones' && (
+        <div>
+          <input className="input-field mb-4 text-sm" placeholder="Buscar por nombre, email, CI, estado…"
+            value={search} onChange={e => setSearch(e.target.value)} />
+          <div className="text-xs text-white/30 mb-3">{filtered.length} órdenes</div>
+          <div className="card p-0 overflow-x-auto">
+            <table className="w-full text-sm min-w-[900px]">
+              <thead>
+                <tr style={{ background: 'rgba(255,255,255,0.04)' }}>
+                  {['Fecha', 'Comprador', 'CI', 'Paquete', 'Total', 'Estado', 'Cód. Datafast', 'Ref Anulación', 'Acción'].map(h => (
+                    <th key={h} className="text-left px-3 py-3 text-white/40 font-medium whitespace-nowrap">{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {filtered.map((r, i) => {
+                  const row = r as {
+                    id: string; nombres: string; apellidos: string; email: string; ci_pasaporte: string
+                    paquete: string; cantidad: number; total: string
+                    estado: string; result_code: string | null; payment_id: string | null
+                    pagado_at: string | null; anulada_at: string | null
+                    anulacion_code: string | null; anulacion_ref: string | null
+                    created_at: string
+                  }
+                  const estadoColor = row.estado === 'paid' ? '#00ff88'
+                    : row.estado === 'anulada' ? '#f59e0b'
+                    : row.estado === 'pending' ? '#60a5fa'
+                    : '#ef4444'
+                  const estadoLabel = row.estado === 'paid' ? 'Pagada'
+                    : row.estado === 'anulada' ? 'Anulada'
+                    : row.estado === 'pending' ? 'Pendiente'
+                    : 'Fallida'
+                  const fecha = row.pagado_at ?? row.created_at
+                  const msg = anulMsg[row.id]
+                  return (
+                    <tr key={i} style={{ borderTop: '1px solid rgba(255,255,255,0.05)' }}>
+                      <td className="px-3 py-2.5 text-white/50 text-xs whitespace-nowrap">
+                        {fecha ? new Date(fecha).toLocaleString('es', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—'}
+                      </td>
+                      <td className="px-3 py-2.5">
+                        <p className="text-white whitespace-nowrap">{row.nombres} {row.apellidos}</p>
+                        <p className="text-white/40 text-xs">{row.email}</p>
+                      </td>
+                      <td className="px-3 py-2.5 text-white/60 font-mono text-xs">{row.ci_pasaporte ?? '—'}</td>
+                      <td className="px-3 py-2.5 text-white/60 capitalize">
+                        {row.paquete ?? '—'}
+                        <span className="text-white/30 text-xs ml-1">×{row.cantidad}</span>
+                      </td>
+                      <td className="px-3 py-2.5 font-bold" style={{ color: '#00ff88' }}>${Number(row.total).toFixed(2)}</td>
+                      <td className="px-3 py-2.5">
+                        <Badge text={estadoLabel} color={estadoColor} />
+                      </td>
+                      <td className="px-3 py-2.5 font-mono text-xs">
+                        {row.result_code
+                          ? <span style={{ color: row.result_code === '000.100.112' ? '#00ff88' : '#ef4444' }}>{row.result_code}</span>
+                          : <span className="text-white/20">—</span>}
+                        {row.anulacion_code && (
+                          <p className="text-f59e0b text-xs mt-0.5" style={{ color: '#f59e0b' }}>RF: {row.anulacion_code}</p>
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5 font-mono text-xs text-white/50">
+                        {row.anulacion_ref ?? '—'}
+                        {row.anulada_at && (
+                          <p className="text-white/30 text-xs">
+                            {new Date(row.anulada_at).toLocaleString('es', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+                          </p>
+                        )}
+                      </td>
+                      <td className="px-3 py-2.5">
+                        {row.estado === 'paid' && row.payment_id && (
+                          <div>
+                            <button
+                              onClick={() => anularOrden(row.id)}
+                              disabled={anulando === row.id}
+                              className="text-xs px-3 py-1 rounded-lg font-semibold transition-all disabled:opacity-40"
+                              style={{ background: '#f59e0b22', color: '#f59e0b', border: '1px solid #f59e0b55' }}>
+                              {anulando === row.id ? 'Anulando…' : 'Anular'}
+                            </button>
+                            {msg && <p className="text-xs mt-1" style={{ color: msg.startsWith('✅') ? '#00ff88' : '#ef4444' }}>{msg}</p>}
+                          </div>
+                        )}
+                        {row.estado === 'anulada' && (
+                          <span className="text-xs text-white/30">Anulada</span>
+                        )}
+                        {(row.estado === 'failed' || row.estado === 'pending') && (
+                          <span className="text-xs text-white/20">—</span>
+                        )}
+                        {msg && row.estado !== 'paid' && (
+                          <p className="text-xs" style={{ color: msg.startsWith('✅') ? '#00ff88' : '#ef4444' }}>{msg}</p>
+                        )}
+                      </td>
+                    </tr>
+                  )
+                })}
+                {filtered.length === 0 && (
+                  <tr><td colSpan={9} className="px-4 py-8 text-center text-white/30">Sin transacciones</td></tr>
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       )}

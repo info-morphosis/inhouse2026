@@ -103,6 +103,20 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ data })
     }
 
+    if (view === 'transacciones') {
+      const { data } = await supabase
+        .from('orders')
+        .select(`
+          id, nombres, apellidos, email, ci_pasaporte,
+          paquete, cantidad, total,
+          estado, result_code, payment_id, checkout_id,
+          pagado_at, anulada_at, anulacion_code, anulacion_ref,
+          created_at
+        `)
+        .order('created_at', { ascending: false })
+      return NextResponse.json({ data: data ?? [] })
+    }
+
     if (view === 'facturas') {
       const { data } = await supabase
         .from('orders')
