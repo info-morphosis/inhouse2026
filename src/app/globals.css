@@ -153,25 +153,31 @@ select.input-field option {
 }
 
 /* ── Widget de pago Datafast — style:'plain' + Figura 23 de la guía ──
-   style:'plain' elimina el card propio de Datafast; el CSS de abajo
-   reproduce el aspecto de la Figura 23: campos blancos de 44px de alto,
-   labels grises, botón verde ancho completo (sección 5.7 de la guía). */
-.wpwl-form {
-  background: transparent;
-  padding: 0;
+   Layout vertical apilado: label arriba, campo abajo, botón ancho completo. */
+.wpwl-form { background: transparent; padding: 0; }
+
+/* Forzar layout vertical (label sobre campo) en todos los grupos */
+.wpwl-group {
+  margin-bottom: 1rem;
+  display: block !important;
+  width: 100% !important;
 }
-.wpwl-group { margin-bottom: 0.875rem; }
+.wpwl-wrapper {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  float: none !important;
+}
 .wpwl-label {
-  display: block;
   font-size: 0.8125rem;
   color: #4b5563 !important;
   font-weight: 600;
   margin-bottom: 0.35rem;
+  width: 100% !important;
+  float: none !important;
 }
-/* Inputs de texto (expiry, cardHolder) */
-.wpwl-control,
-.wpwl-control-expiry,
-.wpwl-control-cardHolder {
+/* Inputs de texto (expiry, cardHolder, brand selector) */
+.wpwl-control {
   height: 44px !important;
   width: 100% !important;
   border: 1px solid #d1d5db !important;
@@ -181,28 +187,30 @@ select.input-field option {
   font-size: 15px !important;
   background: #ffffff !important;
   -webkit-text-fill-color: #111827 !important;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
+  float: none !important;
 }
 .wpwl-control::placeholder { color: #9ca3af !important; }
-.wpwl-control:focus,
-.wpwl-control-cardHolder:focus {
+.wpwl-control:focus {
   border-color: #00b26a !important;
   box-shadow: 0 0 0 2px rgba(0,178,106,0.18) !important;
   outline: none !important;
 }
-/* Wrappers de los iframes (card number y CVV) — mismo estilo visual */
+/* Wrappers de iframes (card number y CVV) */
 .wpwl-wrapper-cardNumber,
 .wpwl-wrapper-cvv {
   height: 44px !important;
+  width: 100% !important;
   border: 1px solid #d1d5db !important;
   border-radius: 8px !important;
   background: #ffffff !important;
   display: flex !important;
   align-items: center !important;
   padding: 0 0.875rem !important;
-  box-sizing: border-box;
+  box-sizing: border-box !important;
+  float: none !important;
 }
-/* Botón Pagar — Figura 23: ancho completo, verde, 44px */
+/* Botón Pagar — ancho completo, verde, 44px */
 .wpwl-button-pay {
   height: 44px !important;
   width: 100% !important;
@@ -213,6 +221,12 @@ select.input-field option {
   font-weight: 700 !important;
   font-size: 1rem !important;
   cursor: pointer !important;
-  margin-top: 0.25rem !important;
+  margin-top: 0.5rem !important;
+  display: block !important;
+  float: none !important;
 }
 .wpwl-button-pay:hover { background: #009a5c !important; }
+/* Logo de marca suelto (ej. "VISA" debajo del selector) — ocultar */
+.wpwl-brand-card { display: none !important; }
+/* Clearfix para el form */
+.wpwl-form::after { content: ''; display: table; clear: both; }
