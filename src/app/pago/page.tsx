@@ -1,7 +1,8 @@
 'use client'
 import { Suspense, useEffect } from 'react'
 import { useSearchParams } from 'next/navigation'
-import Image from 'next/image'
+import EventHeader from '@/components/EventHeader'
+import LogoBadge from '@/components/LogoBadge'
 
 const WIDGET_BASE =
   (process.env.NEXT_PUBLIC_DATAFAST_ENV || 'test').toLowerCase().startsWith('prod')
@@ -47,9 +48,9 @@ function PagoWidget() {
 
   if (!checkoutId) {
     return (
-      <div className="min-h-screen bg-white flex items-center justify-center px-4">
-        <p className="text-gray-500">Falta el identificador de pago. Vuelve a intentar desde el checkout.</p>
-      </div>
+      <main className="min-h-screen flex items-center justify-center px-4">
+        <p className="text-white/60">Falta el identificador de pago. Vuelve a intentar desde el checkout.</p>
+      </main>
     )
   }
 
@@ -58,42 +59,30 @@ function PagoWidget() {
     : '/api/checkout/resultado'
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header compacto en blanco/gris */}
-      <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center justify-between max-w-lg mx-auto">
-        <a href="/" className="flex items-center gap-2 text-gray-400 hover:text-gray-600 text-sm">
-          ← Cancelar
-        </a>
-        <Image
-          src="/logo-inhouse.png"
-          alt="INHOUSE Tech 2026"
-          width={100}
-          height={40}
-          className="object-contain"
-        />
-        <div className="w-16" />
-      </header>
+    <>
+      <EventHeader />
+      <main className="min-h-screen max-w-lg mx-auto px-4 py-8">
+        <LogoBadge />
+        <a href="/" className="text-white/40 text-sm hover:text-white mb-6 inline-block">← Cancelar</a>
 
-      <main className="max-w-lg mx-auto px-4 py-8">
-        <div className="text-center mb-6">
-          <h1 className="text-gray-800 text-xl font-bold">Pago seguro</h1>
-          <p className="text-gray-500 text-sm mt-1">
+        <div className="card">
+          <h1 className="text-xl font-bold mb-1">Pago seguro</h1>
+          <p className="text-white/50 text-sm mb-6">
             Ingresa los datos de tu tarjeta. El pago es procesado por Datafast.
           </p>
+
+          <form
+            action={shopperResultUrl}
+            className="paymentWidgets"
+            data-brands="VISA MASTER DINERS"
+          />
         </div>
 
-        {/* El widget de Datafast renderiza su propio card aquí */}
-        <form
-          action={shopperResultUrl}
-          className="paymentWidgets"
-          data-brands="VISA MASTER DINERS"
-        />
-
-        <p className="text-gray-400 text-xs text-center mt-6">
-          Tus datos viajan cifrados directamente a Datafast (certificación PCI DSS).
+        <p className="text-white/30 text-xs text-center mt-6">
+          Tus datos de tarjeta viajan cifrados directamente a Datafast (certificación PCI DSS).
         </p>
       </main>
-    </div>
+    </>
   )
 }
 
