@@ -53,7 +53,7 @@ export default function RegistroRrppPage() {
         <div className="inline-block bg-[#00ff88] text-[#0a0e2a] font-bold px-4 py-1 rounded-full text-sm mb-4">
           INVITADO ESPECIAL
         </div>
-        <h1 className="text-2xl font-bold">Invitados Especiales</h1>
+        <h1 className="text-2xl font-bold">Invitados Especiales — Relaciones Públicas</h1>
         <p className="text-white/50 mt-2 text-sm">20 agosto · Tenis Club Samborondón</p>
       </div>
       <form onSubmit={handleSubmit} className="card space-y-4">
