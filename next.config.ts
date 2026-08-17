@@ -44,18 +44,20 @@ const nextConfig: NextConfig = {
   serverExternalPackages: ['node-forge'],
   async headers() {
     return [
-      {
-        source: '/pago',
-        headers: [
-          ...baseHeaders,
-          { key: 'Content-Security-Policy', value: cspPago },
-        ],
-      },
+      // Regla general primero — Next.js aplica todas las reglas que coinciden
+      // en orden; /pago viene después para que su CSP sobreescriba el general.
       {
         source: '/:path*',
         headers: [
           ...baseHeaders,
           { key: 'Content-Security-Policy', value: cspGeneral },
+        ],
+      },
+      {
+        source: '/pago',
+        headers: [
+          ...baseHeaders,
+          { key: 'Content-Security-Policy', value: cspPago },
         ],
       },
     ]
