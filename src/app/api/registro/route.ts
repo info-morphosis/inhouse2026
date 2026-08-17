@@ -102,12 +102,16 @@ export async function POST(req: NextRequest) {
         morphosis: 'CORTESÍA MORPHOSIS',
         especiales: 'INVITADO ESPECIAL',
       }
+      const slugBadgeOverride: Record<string, string> = {
+        medios: 'PRENSA',
+      }
+      const badge_tipo = slugBadgeOverride[slug] ?? badgeMap[campaign.tipo] ?? 'INVITADO'
 
       const { data: invitado, error: insErr } = await supabase.from('invitados').insert({
         campaign_id: campaign.id,
         nombres, apellidos, tipo_id, ci_pasaporte, email, whatsapp,
         codigo: `INHOUSE2026-I-${num}`,
-        badge_tipo: badgeMap[campaign.tipo] || 'INVITADO',
+        badge_tipo,
         empresa: empresa || null,
       }).select().single()
 
