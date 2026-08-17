@@ -16,16 +16,34 @@ function PagoWidget() {
   useEffect(() => {
     if (!checkoutId) return
 
-    // Sin style:'plain' → widget usa su UI estándar de Datafast (igual al manual)
     ;(window as unknown as { wpwlOptions?: unknown }).wpwlOptions = {
       locale: 'es',
+      onBeforeSubmitCard: function () {
+        const holder = document.querySelector('.wpwl-control-cardHolder') as HTMLInputElement | null
+        if (holder && holder.value.trim() === '') {
+          holder.style.border = '2px solid #e02424'
+          holder.style.background = '#fff5f5'
+          return false
+        }
+        return true
+      },
     }
 
     const script = document.createElement('script')
     script.src = `${WIDGET_BASE}/v1/paymentWidgets.js?checkoutId=${checkoutId}`
     script.async = true
     document.body.appendChild(script)
-    return () => { document.body.removeChild(script) }
+
+    // Required by Datafast (guía sección 3.1, pág. 11)
+    const dfScript = document.createElement('script')
+    dfScript.type = 'text/javascript'
+    dfScript.src = 'https://www.datafast.com.ec/js/dfAdditionalValidations1.js'
+    document.body.appendChild(dfScript)
+
+    return () => {
+      if (document.body.contains(script)) document.body.removeChild(script)
+      if (document.body.contains(dfScript)) document.body.removeChild(dfScript)
+    }
   }, [checkoutId])
 
   if (!checkoutId) {
@@ -47,9 +65,9 @@ function PagoWidget() {
         <LogoBadge />
         <a href="/" className="text-white/40 text-sm hover:text-white mb-6 inline-block">← Cancelar</a>
 
-        <div className="card">
-          <h1 className="text-xl font-bold mb-1">Pago seguro</h1>
-          <p className="text-white/50 text-sm mb-6">
+        <div className="bg-white rounded-xl p-6 shadow-lg">
+          <h1 className="text-gray-800 text-xl font-bold mb-1">Pago seguro</h1>
+          <p className="text-gray-500 text-sm mb-6">
             Ingresa los datos de tu tarjeta. El pago es procesado por Datafast.
           </p>
 

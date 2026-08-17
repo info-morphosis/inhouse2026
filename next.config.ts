@@ -27,7 +27,7 @@ const cspGeneral = [
 // en ambos ambientes.
 const cspPago = [
   "default-src 'self'",
-  "script-src 'self' 'unsafe-inline' https://eu-test.oppwa.com https://eu-prod.oppwa.com",
+  "script-src 'self' 'unsafe-inline' https://eu-test.oppwa.com https://eu-prod.oppwa.com https://www.datafast.com.ec",
   "style-src 'self' 'unsafe-inline'",
   "img-src 'self' data: blob: https://eu-test.oppwa.com https://eu-prod.oppwa.com",
   "font-src 'self' data:",
