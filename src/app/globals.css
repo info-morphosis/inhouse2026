@@ -152,28 +152,67 @@ select.input-field option {
   color: white;
 }
 
-/* ── Widget de pago Datafast (COPYandPAY / wpwl) ──
-   El widget copia el color y tipografía del contenedor .wpwl-control a sus
-   campos (incluido el iframe del número de tarjeta y CVV). El tema oscuro del
-   sitio dejaba el texto blanco sobre blanco = invisible al escribir.
-   Forzamos texto oscuro sobre fondo claro para que los números se vean. */
-.wpwl-form { background: #ffffff; border-radius: 12px; padding: 10px 14px 6px; }
-.wpwl-label { color: #33405c !important; }
-.wpwl-group { margin-bottom: 10px; }
-.wpwl-control,
-.wpwl-control:focus {
-  color: #0a0e2a !important;
-  background: #ffffff !important;
-  border: 1px solid #cdd4e4 !important;
-  border-radius: 8px !important;
-  -webkit-text-fill-color: #0a0e2a !important;
+/* ── Widget de pago Datafast — style:'plain' + Figura 23 de la guía ──
+   style:'plain' elimina el card propio de Datafast; el CSS de abajo
+   reproduce el aspecto de la Figura 23: campos blancos de 44px de alto,
+   labels grises, botón verde ancho completo (sección 5.7 de la guía). */
+.wpwl-form {
+  background: transparent;
+  padding: 0;
 }
-.wpwl-control::placeholder { color: #9aa3b8 !important; }
-.wpwl-brand { color: #0a0e2a; }
-.wpwl-button-pay {
-  background: #00b26a !important;
+.wpwl-group { margin-bottom: 0.875rem; }
+.wpwl-label {
+  display: block;
+  font-size: 0.8125rem;
+  color: #4b5563 !important;
+  font-weight: 600;
+  margin-bottom: 0.35rem;
+}
+/* Inputs de texto (expiry, cardHolder) */
+.wpwl-control,
+.wpwl-control-expiry,
+.wpwl-control-cardHolder {
+  height: 44px !important;
+  width: 100% !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  padding: 0 0.875rem !important;
+  color: #111827 !important;
+  font-size: 15px !important;
+  background: #ffffff !important;
+  -webkit-text-fill-color: #111827 !important;
+  box-sizing: border-box;
+}
+.wpwl-control::placeholder { color: #9ca3af !important; }
+.wpwl-control:focus,
+.wpwl-control-cardHolder:focus {
   border-color: #00b26a !important;
+  box-shadow: 0 0 0 2px rgba(0,178,106,0.18) !important;
+  outline: none !important;
+}
+/* Wrappers de los iframes (card number y CVV) — mismo estilo visual */
+.wpwl-wrapper-cardNumber,
+.wpwl-wrapper-cvv {
+  height: 44px !important;
+  border: 1px solid #d1d5db !important;
+  border-radius: 8px !important;
+  background: #ffffff !important;
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 0.875rem !important;
+  box-sizing: border-box;
+}
+/* Botón Pagar — Figura 23: ancho completo, verde, 44px */
+.wpwl-button-pay {
+  height: 44px !important;
+  width: 100% !important;
+  background: #00b26a !important;
+  border: none !important;
+  border-radius: 8px !important;
   color: #ffffff !important;
   font-weight: 700 !important;
-  border-radius: 999px !important;
+  font-size: 1rem !important;
+  cursor: pointer !important;
+  margin-top: 0.25rem !important;
 }
+.wpwl-button-pay:hover { background: #009a5c !important; }

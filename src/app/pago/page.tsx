@@ -16,8 +16,17 @@ function PagoWidget() {
   useEffect(() => {
     if (!checkoutId) return
 
+    // style:'plain' → widget sin card propio; el CSS de globals.css aplica
+    // la apariencia de la Figura 23 de la guía Datafast (sección 5.6 / 5.7).
     ;(window as unknown as { wpwlOptions?: unknown }).wpwlOptions = {
+      style: 'plain',
       locale: 'es',
+      iframeStyles: {
+        'card-number':             { color: '#111827', 'font-size': '15px' },
+        'card-number-placeholder': { color: '#9ca3af', 'font-size': '15px' },
+        'cvv':                     { color: '#111827', 'font-size': '15px' },
+        'cvv-placeholder':         { color: '#9ca3af', 'font-size': '15px' },
+      },
       onBeforeSubmitCard: function () {
         const holder = document.querySelector('.wpwl-control-cardHolder') as HTMLInputElement | null
         if (holder && holder.value.trim() === '') {
@@ -65,9 +74,10 @@ function PagoWidget() {
         <LogoBadge />
         <a href="/" className="text-white/40 text-sm hover:text-white mb-6 inline-block">← Cancelar</a>
 
-        <div className="card">
-          <h1 className="text-xl font-bold mb-1">Pago seguro</h1>
-          <p className="text-white/50 text-sm mb-6">
+        {/* Card blanco para el widget — coincide con el fondo blanco de la Figura 23 */}
+        <div className="bg-white rounded-xl p-6 shadow-md">
+          <h1 className="text-gray-800 text-xl font-bold mb-1">Pago seguro</h1>
+          <p className="text-gray-500 text-sm mb-5">
             Ingresa los datos de tu tarjeta. El pago es procesado por Datafast.
           </p>
 
