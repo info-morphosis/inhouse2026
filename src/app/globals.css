@@ -228,5 +228,11 @@ select.input-field option {
 .wpwl-button-pay:hover { background: #009a5c !important; }
 /* Logo de marca suelto (ej. "VISA" debajo del selector) — ocultar */
 .wpwl-brand-card { display: none !important; }
+/* Campos 3DS/enrollment que no forman parte del flujo de pago básico (Fig. 23) */
+.wpwl-group-mobilePhoneCountryCode,
+.wpwl-group-mobilePhoneNumber,
+.wpwl-group-birthDate,
+.wpwl-group-clickToPayConfirmation,
+.wpwl-group-visaInstallmentConfirmation { display: none !important; }
 /* Clearfix para el form */
 .wpwl-form::after { content: ''; display: table; clear: both; }
