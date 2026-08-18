@@ -21,37 +21,90 @@ function PagoWidget() {
     ;(window as unknown as { wpwlOptions?: unknown }).wpwlOptions = {
       style: 'plain',
       locale: 'es',
+      labels: {
+        cvv: 'CVV',
+        cardHolder: 'Nombre (igual que en la tarjeta)',
+      },
       iframeStyles: {
         'card-number':             { color: '#111827', 'font-size': '15px' },
         'card-number-placeholder': { color: '#9ca3af', 'font-size': '15px' },
         'cvv':                     { color: '#111827', 'font-size': '15px' },
         'cvv-placeholder':         { color: '#9ca3af', 'font-size': '15px' },
       },
+      onReady: function () {
+        // Sello oficial "Powered by Datafast" antes del botón Pagar (Figura 23).
+        // Idempotente: no duplica si onReady se dispara en más de un render.
+        const form = document.querySelector('.wpwl-form')
+        const btn = form?.querySelector('.wpwl-button-pay')
+        if (form && btn && !form.querySelector('.datafast-verified')) {
+          const img = document.createElement('img')
+          img.src = 'https://www.datafast.com.ec/images/verified.png'
+          img.alt = 'Powered by Datafast'
+          img.className = 'datafast-verified'
+          btn.insertAdjacentElement('beforebegin', img)
+        }
+      },
       onBeforeSubmitCard: function () {
+        // Validación oficial Datafast (guía Fig. 21): bloquear pago si el nombre
+        // del titular está vacío → evita rechazo del banco (100.100.400/402).
         const holder = document.querySelector('.wpwl-control-cardHolder') as HTMLInputElement | null
         if (holder && holder.value.trim() === '') {
-          holder.style.border = '2px solid #e02424'
-          holder.style.background = '#fff5f5'
+          holder.classList.add('wpwl-has-error')
+          const form = holder.closest('.wpwl-form')
+          if (form && !form.querySelector('.wpwl-hint-cardHolderError')) {
+            const hint = document.createElement('div')
+            hint.className = 'wpwl-hint wpwl-hint-cardHolderError'
+            hint.textContent = 'Ingresa el nombre igual que aparece en la tarjeta'
+            holder.insertAdjacentElement('afterend', hint)
+          }
+          const btn = document.querySelector('.wpwl-button-pay')
+          if (btn) {
+            btn.classList.add('wpwl-button-error')
+            btn.setAttribute('disabled', 'disabled')
+          }
           return false
         }
         return true
       },
     }
 
-    const script = document.createElement('script')
-    script.src = `${WIDGET_BASE}/v1/paymentWidgets.js?checkoutId=${checkoutId}`
-    script.async = true
-    document.body.appendChild(script)
+    // Al escribir el nombre, limpiar el error y re-habilitar el botón Pagar
+    // (evita que el botón quede deshabilitado tras un intento con nombre vacío).
+    const w = window as unknown as { __dfCardHolderBound?: boolean }
+    if (!w.__dfCardHolderBound) {
+      w.__dfCardHolderBound = true
+      document.addEventListener('input', (e) => {
+        const t = e.target as HTMLInputElement | null
+        if (t && t.classList?.contains('wpwl-control-cardHolder') && t.value.trim() !== '') {
+          t.classList.remove('wpwl-has-error')
+          document.querySelector('.wpwl-hint-cardHolderError')?.remove()
+          const btn = document.querySelector('.wpwl-button-pay')
+          btn?.classList.remove('wpwl-button-error')
+          btn?.removeAttribute('disabled')
+        }
+      })
+    }
 
-    // Requerido por Datafast (guía pág. 11)
-    const dfScript = document.createElement('script')
-    dfScript.type = 'text/javascript'
-    dfScript.src = 'https://www.datafast.com.ec/js/dfAdditionalValidations1.js'
-    document.body.appendChild(dfScript)
+    const WIDGET_ID = 'df-payment-widget'
+    // Guarda contra doble carga (React Strict Mode en dev / re-render): un solo <script>.
+    if (!document.getElementById(WIDGET_ID)) {
+      const script = document.createElement('script')
+      script.id = WIDGET_ID
+      script.src = `${WIDGET_BASE}/v1/paymentWidgets.js?checkoutId=${checkoutId}`
+      script.async = true
+      document.body.appendChild(script)
+    }
+
+    // NOTA: la guía (pág. 11) indica cargar
+    // https://www.datafast.com.ec/js/dfAdditionalValidations1.js
+    // pero esa URL responde 404 (archivo inexistente en el servidor de Datafast,
+    // verificado 2026-08-17 con curl + UA de navegador). Los pagos se aprueban sin
+    // él, así que se omite para no generar un error de red en consola. Reactivar
+    // solo si Datafast confirma la URL vigente.
 
     return () => {
-      if (document.body.contains(script)) document.body.removeChild(script)
-      if (document.body.contains(dfScript)) document.body.removeChild(dfScript)
+      document.getElementById(WIDGET_ID)?.remove()
+      delete (window as unknown as { wpwlOptions?: unknown }).wpwlOptions
     }
   }, [checkoutId])
 

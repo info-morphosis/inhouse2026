@@ -196,7 +196,7 @@ select.input-field option {
   box-shadow: 0 0 0 2px rgba(0,178,106,0.18) !important;
   outline: none !important;
 }
-/* Wrappers de iframes (card number y CVV) */
+/* Wrappers de iframes (card number y CVV) — ÚNICO borde visible */
 .wpwl-wrapper-cardNumber,
 .wpwl-wrapper-cvv {
   height: 44px !important;
@@ -208,7 +208,19 @@ select.input-field option {
   align-items: center !important;
   padding: 0 0.875rem !important;
   box-sizing: border-box !important;
+  overflow: hidden !important;
   float: none !important;
+}
+/* El <iframe> interno NO debe dibujar su propio borde/alto → mata el doble borde.
+   Debe ir DESPUÉS de .wpwl-control (misma especificidad, gana el orden). */
+.wpwl-control-cardNumber,
+.wpwl-control-cvv {
+  border: 0 !important;
+  height: 42px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
 }
 /* Botón Pagar — ancho completo, verde, 44px */
 .wpwl-button-pay {
@@ -226,13 +238,44 @@ select.input-field option {
   float: none !important;
 }
 .wpwl-button-pay:hover { background: #009a5c !important; }
-/* Logo de marca suelto (ej. "VISA" debajo del selector) — ocultar */
-.wpwl-brand-card { display: none !important; }
+/* Logo de la marca seleccionada (Figura 23) — visible, tamaño moderado */
+.wpwl-brand-card {
+  display: inline-block !important;
+  max-height: 26px !important;
+  width: auto !important;
+  vertical-align: middle !important;
+}
+/* Sello oficial "Powered by Datafast" insertado por onReady (antes del botón) */
+.datafast-verified {
+  display: block;
+  width: 100%;
+  max-width: 360px;
+  height: auto;
+  margin: 20px auto 16px;
+}
 /* Campos 3DS/enrollment que no forman parte del flujo de pago básico (Fig. 23) */
 .wpwl-group-mobilePhoneCountryCode,
 .wpwl-group-mobilePhoneNumber,
 .wpwl-group-birthDate,
 .wpwl-group-clickToPayConfirmation,
 .wpwl-group-visaInstallmentConfirmation { display: none !important; }
+/* Estados de error de la validación del nombre del titular (Fig. 21 guía) */
+.wpwl-control.wpwl-has-error,
+.wpwl-control-cardHolder.wpwl-has-error {
+  border-color: #e02424 !important;
+  box-shadow: 0 0 0 2px rgba(224,36,36,0.15) !important;
+}
+.wpwl-hint-cardHolderError {
+  color: #e02424 !important;
+  font-size: 0.75rem !important;
+  margin-top: 0.25rem !important;
+}
+.wpwl-button-pay.wpwl-button-error,
+.wpwl-button-pay[disabled] {
+  opacity: 0.55 !important;
+  cursor: not-allowed !important;
+  background: #9ca3af !important;
+}
+
 /* Clearfix para el form */
 .wpwl-form::after { content: ''; display: table; clear: both; }
