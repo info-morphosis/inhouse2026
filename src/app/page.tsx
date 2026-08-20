@@ -167,11 +167,29 @@ export default function LandingPage() {
                 IV Edición · Experiencia IA 2026
               </span>
             </div>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-[1.1] mb-4 text-white">
-              Conecta.<br />
-              <span style={{ color: '#00ff88' }}>Transforma.</span><br />
-              Inspira.
-            </h1>
+            <div className="relative inline-block mb-4">
+              <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-[1.1] text-white">
+                Conecta.<br />
+                <span style={{ color: '#00ff88' }}>Transforma.</span><br />
+                Inspira.
+              </h1>
+              {SOLD_OUT && (
+                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+                  <div
+                    className="w-[135%] text-center font-extrabold uppercase text-xl sm:text-3xl md:text-4xl tracking-[0.15em] py-2 sm:py-3"
+                    style={{
+                      transform: 'rotate(-13deg)',
+                      background: '#00ff88',
+                      color: '#0a0e2a',
+                      boxShadow: '0 10px 30px rgba(0,0,0,0.5)',
+                      border: '2px solid #0a0e2a',
+                    }}
+                  >
+                    Agotado · Sold Out
+                  </div>
+                </div>
+              )}
+            </div>
             <p className="text-sm sm:text-xl text-white/60 mb-8 font-light leading-snug">20 de agosto 2026 · 15H00<br className="sm:hidden" /><span className="hidden sm:inline"> · </span>Tenis Club Samborondón</p>
 
             {/* COUNTDOWN */}
