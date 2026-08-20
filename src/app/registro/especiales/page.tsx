@@ -3,7 +3,10 @@ import { useState } from 'react'
 import EventHeader from '@/components/EventHeader'
 import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
+import RegistroCerrado from '@/components/RegistroCerrado'
 import { normalizarWhatsappEc } from '@/lib/phone'
+
+const CERRADO = true
 
 export default function RegistroEspecialesPage() {
   const [form, setForm] = useState({
@@ -13,6 +16,8 @@ export default function RegistroEspecialesPage() {
   const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  if (CERRADO) return <RegistroCerrado etiqueta="INVITADOS ESPECIALES" titulo="Invitados Especiales" />
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

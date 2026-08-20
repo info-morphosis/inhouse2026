@@ -3,7 +3,10 @@ import { useState } from 'react'
 import EventHeader from '@/components/EventHeader'
 import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
+import RegistroCerrado from '@/components/RegistroCerrado'
 import { normalizarWhatsappEc } from '@/lib/phone'
+
+const CERRADO = true
 
 export default function RegistroRrppPage() {
   const [form, setForm] = useState({
@@ -13,6 +16,8 @@ export default function RegistroRrppPage() {
   const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  if (CERRADO) return <RegistroCerrado etiqueta="INVITADO ESPECIAL" titulo="Invitados Especiales — Relaciones Públicas" />
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

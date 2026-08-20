@@ -3,7 +3,10 @@ import { useState, use } from 'react'
 import EventHeader from '@/components/EventHeader'
 import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
+import RegistroCerrado from '@/components/RegistroCerrado'
 import { normalizarWhatsappEc } from '@/lib/phone'
+
+const CERRADO = true
 
 export default function RegistroAuspiciantePage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = use(params)
@@ -15,6 +18,8 @@ export default function RegistroAuspiciantePage({ params }: { params: Promise<{ 
   const [done, setDone] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+
+  if (CERRADO) return <RegistroCerrado etiqueta="AUSPICIANTE" titulo={`Auspiciante ${nombreAuspiciante}`} />
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
