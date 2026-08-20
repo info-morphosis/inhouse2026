@@ -7,11 +7,39 @@ import LogoBadge from '@/components/LogoBadge'
 import EventFooter from '@/components/EventFooter'
 import { normalizarWhatsappEc } from '@/lib/phone'
 
+const SOLD_OUT = true
+
 const PAQUETES = {
   individual: { label: 'Entrada Individual', cantidad: 1, precio: 120 },
   pack5:      { label: 'Pack Empresarial 5', cantidad: 5, precio: 100 },
   pack10:     { label: 'Pack Corporativo 10', cantidad: 10, precio: 80 },
 } as const
+
+function SoldOutNotice() {
+  return (
+    <>
+    <EventHeader />
+    <main className="min-h-screen max-w-2xl mx-auto px-4 py-8">
+      <LogoBadge />
+      <a href="/" className="text-white/40 text-sm hover:text-white mb-8 inline-block">← Volver</a>
+      <div className="card text-center py-12">
+        <span className="inline-block text-xs font-bold uppercase tracking-[0.3em] px-4 py-1.5 rounded-full mb-6"
+          style={{ background: '#00ff88', color: '#0a0e2a' }}>
+          Aforo completo
+        </span>
+        <h1 className="text-5xl font-extrabold uppercase tracking-tight mb-4" style={{ color: '#00ff88' }}>Agotado</h1>
+        <p className="text-white/60 mb-2">Todas las entradas están vendidas · Sold Out</p>
+        <p className="text-white/40 text-sm max-w-md mx-auto mb-8">
+          La venta de entradas está cerrada. Escríbenos por WhatsApp para cualquier consulta.
+        </p>
+        <a href="https://wa.me/593984309726" target="_blank" rel="noopener noreferrer"
+          className="btn-outline inline-block text-sm px-8 py-3">Contactar por WhatsApp</a>
+      </div>
+    </main>
+    <EventFooter />
+    </>
+  )
+}
 
 function CheckoutForm() {
   const router = useRouter()
@@ -199,6 +227,7 @@ function CheckoutForm() {
 }
 
 export default function CheckoutPage() {
+  if (SOLD_OUT) return <SoldOutNotice />
   return (
     <Suspense>
       <CheckoutForm />

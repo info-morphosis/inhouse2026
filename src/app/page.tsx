@@ -87,6 +87,7 @@ const FEATURES = [
 ]
 
 const EVENT_DATE = new Date('2026-08-20T15:00:00-05:00')
+const SOLD_OUT = true
 
 function CountdownBlock({ value, label }: { value: number; label: string }) {
   return (
@@ -127,8 +128,10 @@ export default function LandingPage() {
           </div>
           <div className="flex items-center gap-3">
             <a href="#entradas" className="btn-neon text-xs sm:text-sm px-3 sm:px-5 py-2">
-              <span className="sm:hidden">Entradas</span>
-              <span className="hidden sm:inline">Comprar entrada</span>
+              {SOLD_OUT ? 'Agotado' : (<>
+                <span className="sm:hidden">Entradas</span>
+                <span className="hidden sm:inline">Comprar entrada</span>
+              </>)}
             </a>
             <button
               onClick={() => setMenuOpen(o => !o)}
@@ -191,7 +194,9 @@ export default function LandingPage() {
               <span className="px-4 py-1.5 rounded-full border border-white/20 text-white/60">🌎 3 países</span>
             </div>
             <div className="flex flex-row gap-2 sm:gap-4 items-center justify-center">
-              <a href="#entradas" className="btn-neon text-sm sm:text-base px-4 sm:px-8 py-2.5 sm:py-3 text-center">Comprar entrada</a>
+              <a href="#entradas" className="btn-neon text-sm sm:text-base px-4 sm:px-8 py-2.5 sm:py-3 text-center">
+                {SOLD_OUT ? 'Entradas agotadas' : 'Comprar entrada'}
+              </a>
               <a href="#agenda" className="btn-outline text-sm sm:text-base px-4 sm:px-8 py-2.5 sm:py-3 text-center">Ver agenda</a>
             </div>
           </div>
@@ -306,6 +311,28 @@ export default function LandingPage() {
             <p className="text-white/50 mt-5">20 de agosto 2026 · Tenis Club Samborondón · Guayaquil</p>
           </div>
 
+          {SOLD_OUT ? (
+            <div className="text-center rounded-2xl p-10 sm:p-14 glass-panel"
+              style={{ border: '1px solid #00ff88', boxShadow: '0 0 30px rgba(0,255,136,0.2)' }}>
+              <span className="inline-block text-xs font-bold uppercase tracking-[0.3em] px-4 py-1.5 rounded-full mb-6"
+                style={{ background: '#00ff88', color: '#0a0e2a' }}>
+                Aforo completo
+              </span>
+              <h3 className="text-5xl sm:text-7xl font-extrabold uppercase tracking-tight mb-4" style={{ color: '#00ff88' }}>
+                Agotado
+              </h3>
+              <p className="text-white/60 text-lg font-light mb-2">Todas las entradas están vendidas · Sold Out</p>
+              <p className="text-white/40 text-sm max-w-md mx-auto">
+                ¡Gracias por el increíble interés! Ya no hay cupos disponibles para esta edición.
+                Escríbenos por WhatsApp para cualquier consulta.
+              </p>
+              <a href="https://wa.me/593984309726" target="_blank" rel="noopener noreferrer"
+                className="btn-outline inline-block text-sm px-8 py-3 mt-8">
+                Contactar por WhatsApp
+              </a>
+            </div>
+          ) : (
+          <>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             {PAQUETES.map((p) => (
               <button
@@ -366,6 +393,8 @@ export default function LandingPage() {
             </button>
             <p className="text-white/30 text-xs mt-4">Los precios no incluyen IVA · Factura emitida a nombre del comprador</p>
           </div>
+          </>
+          )}
         </section>
       </main>
 
